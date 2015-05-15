@@ -1,0 +1,21 @@
+Mail du prof ci-dessous:
+
+#############################################################################
+
+Pour le Projet, après avoir compris le code existant (il faut demander le code à vos collègues de AIR2 (Amadou Diaw Fall et Abdessatar Bouguila) car je n'ai pas eu le code), il faudra implémenter:
+1. Deux méthodes de clustering :
+    - K-moyennes
+    - CAH : Classification hiérarchique
+2. Visualisation de résultats de clustering
+3. Validation de ces résultats:
+    - indice de Davies-Bouldin
+    - indice de pureté (accuracy) si la classe réelle est connue
+    - indice de Rand si la classe réelle est connue
+4. Intégrer un module existante (SOM : self organizing map) dans l'outil (je dispose du code).
+
+
+
+##############################################################################
+
+Il faut récupérer le module existant (SOM) => Le mail est envoyé au prof, nous restons en attente de sa réponse.
+
