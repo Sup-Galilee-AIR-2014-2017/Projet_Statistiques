@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 	### A FAIRE ###
 
@@ -19,3 +20,20 @@
 -> Rajouter le premier doc que l'on a envoyé a Nistor [OK]
 -> Apprendre le data clustering [OK]
 -> Ajouter les liens de cours de Datamining dans le repo [OK]
+=======
+A faire
+
+-> Réorganiser dossiers des documents projet [OK]
+-> Ajouter les instructions que nous a passé le prof [OK]
+-> Rajouter le premier doc que l'on a envoyé a Nistor [OK]
+-> Apprendre le data clustering [OK]
+
+-> Ajouter les liens de cours de Datamining dans le repo
+-> Regarder des exemples de datamining appliqués.
+-> Commit et push
+
+
+-> Regarder le code et voir comment les anciens ont géré l'intégrationdes modules. Est-ce que on peut vraiment simplement intégrer des modules?
+-> Voir et chercher à comprendre comment on pourrait implémenter chaque élément qui doit être mis en place. 
+-> Faire le découpage des tâches 
+>>>>>>> 01cb8019f462ec15d369791f45ce5ed818be5e09
