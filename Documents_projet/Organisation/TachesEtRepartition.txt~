@@ -1,0 +1,15 @@
+	*** Taches à faire ***
+
+
+	# Prioritaires
+
+-> Débogguer le jeu de données suivant qui devrait afficher 0 à l'endroit de l'élément manquant:
+	5,9,,29,AIR-1
+	6,8,7,200,AIR-2
+	1,2,3,4,AIR-3
+->
+
+	# Taches mineures (bugs, etc.)
+
+-> Actualisation de l'affichage des statistiques lors d'une importation des données (Quand on se trouve déjà sur la page des données)
+-> Gérer le plantage de l'application lors d'un mauvais formattage du fichier de données. => Affichage d'une erreur.
