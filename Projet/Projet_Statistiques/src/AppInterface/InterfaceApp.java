@@ -1355,8 +1355,8 @@ public class InterfaceApp {
             label.setLayoutData(gd_label);
             new Label(composite_3, SWT.NONE);
             
-            Button btnNewButton_1 = new Button(composite_3, SWT.FLAT);
-            btnNewButton_1.addSelectionListener(new SelectionAdapter() {
+            Button btnImportFile = new Button(composite_3, SWT.FLAT);
+            btnImportFile.addSelectionListener(new SelectionAdapter() {
             	@Override
             	public void widgetSelected(SelectionEvent e) {
             		
@@ -1429,8 +1429,8 @@ public class InterfaceApp {
     	      		
             	}
             });
-            btnNewButton_1.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeImport.png"));
-            btnNewButton_1.setToolTipText("Import data file");
+            btnImportFile.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeImport.png"));
+            btnImportFile.setToolTipText("Import data file");
             
             
             Button btnNewButton_3 = new Button(composite_3, SWT.FLAT);

@@ -1,5 +1,7 @@
 package ModStats;
 
+import java.util.ArrayList;
+
 
 public class DoCalculs {
 	
@@ -329,6 +331,71 @@ public class DoCalculs {
 		}
 		
 		return result; 
+	}
+	
+	public static double getDaviesBouldinIndice(ArrayList<ArrayList<Double>> repartition) {
+		double DB = 0;
+		
+		int k = repartition.size(); //ici, k vaut le nombre de groupes (pas sur, k doit peut être être le nombre de centres définis aléatoirement tout au début dde l'algo).
+
+		for(int i=0; i< k; i++) {
+			ArrayList<Double> group = repartition.get(i);
+			
+			
+			
+			double meanDistanceElementToBarycentreOfGroup = getMeanDistanceElementToBarycentreOfGroup(group);
+			
+			ArrayList<Double> calculMax = new ArrayList<Double>();
+			for (int j=0; j<k; j++) {				
+				if(i != j){
+					ArrayList<Double> groupJ = repartition.get(j);
+					double meanDistanceInGroupJ = getMeanDistanceElementToBarycentreOfGroup(groupJ);
+					double distanceBetweenBarycentres = Math.abs(getBarycentre(group) - getBarycentre(groupJ));
+					calculMax.add((meanDistanceElementToBarycentreOfGroup + meanDistanceInGroupJ) / distanceBetweenBarycentres);
+				}					
+			}
+			
+			double max = getMaxValue(calculMax);
+			DB += max;
+		}
+		
+		DB = DB / k;
+		//0.23
+		return DB;
+	}
+
+	private static double getMaxValue(ArrayList<Double> calculMax) {
+		double max = 0;
+		for (Double value : calculMax) {
+			if(value> max)
+				max = value;
+		}
+		return max;
+	}
+
+	private static double getMeanDistanceElementToBarycentreOfGroup(ArrayList<Double> group) {
+		
+		double barycentreGroup = getBarycentre(group);
+		
+		double mean = 0;
+		for (Double element : group) {
+			double distanceElementToBarycentre = Math.abs(barycentreGroup - element);
+			mean += distanceElementToBarycentre;
+		}
+		
+		mean /= group.size();
+		
+		return mean;
+	}
+	
+	private static double getBarycentre(ArrayList<Double> valuesList) {
+		double sum = 0;
+		for (Double element : valuesList) {
+			sum += element;
+		}		
+		
+		double barycentre = sum / valuesList.size();
+		return barycentre;
 	}
 	
 

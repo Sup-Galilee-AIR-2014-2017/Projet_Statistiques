@@ -1,4 +1,4 @@
- ### Liens des cours pour aider à comprendre le Data-Clustering ###
+﻿ ### Liens des cours pour aider à comprendre le Data-Clustering ###
 
 - http://fr.wikipedia.org/wiki/Exploration_de_donn%C3%A9es	:	Explication sur ce qu'est-ce Data-mining, mère du data-clustering.
 
@@ -7,5 +7,7 @@
 - http://edutechwiki.unige.ch/fr/Clustering_et_classification_hi%C3%A9rarchique_en_text_mining
 
 - http://fr.wikipedia.org/wiki/K-moyennes	:	Explicationde la méthode des K-Moyennes
+
+- http://perso.univ-lyon1.fr/haytham.elghazel/Papers/Pdf/Rapport_These.pdf	:	Indice de Davies Bouldin + Tout le clustering
 
 Une fois que vous avez bien terminé l'étude par vous même de ce qu'est le Data-clustering, retourner regarder le cours que nous a passé le prof et vous comprendrez beaucoup mieux.
