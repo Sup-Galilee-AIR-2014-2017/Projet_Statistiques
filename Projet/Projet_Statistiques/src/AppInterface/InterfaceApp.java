@@ -555,10 +555,13 @@ public class InterfaceApp {
 			    		    		double[] tabMin = calc.getMins(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 			    		    		double[] tabMax = calc.getMaxs(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 			    		    		double[] tabVar = calc.getVariances(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
+			    		    		String[] tabKMoy = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
+			    		    		String[] tabClass = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 			    		    		String[] tabMode = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
+			    		    		
 			    		    		//double [][] tabCorel= calc.getCoefCorls(dfp.getNbDataColumns(),dfp.getNbDataColumns());
 			    		    		if(title.equals("Statistical Calculs")) {
-			    		                corp.createTab(document, dfp.getNbDataColumns(), tabMean, tabMediane, tabSD, tabMin, tabMax, tabVar, tabMode);
+			    		                corp.createTab(document, dfp.getNbDataColumns(), tabMean, tabMediane, tabSD, tabMin, tabMax, tabVar, tabKMoy, tabClass, tabMode);
 			    		                try {
 			    		                 document.add(corp.paraHeader);
 			    		                 document.add(corp.paraIntro);
@@ -888,6 +891,16 @@ public class InterfaceApp {
             		tblclmnVariance.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeVariance.png"));
             		tblclmnVariance.setWidth(115);
             		tblclmnVariance.setText("Variance");
+            		
+            		TableColumn tblclmnKMoy = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
+            		tblclmnKMoy.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMode.png"));
+            		tblclmnKMoy.setWidth(107);
+            		tblclmnKMoy.setText("KMoyennes");
+            		
+            		TableColumn tblclmnClass = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
+            		tblclmnKMoy.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMode.png"));
+            		tblclmnKMoy.setWidth(107);
+            		tblclmnKMoy.setText("Classfication");
 	                  
             		TableColumn tblclmnMode = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		tblclmnMode.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMode.png"));
@@ -902,7 +915,7 @@ public class InterfaceApp {
             			for(int i = 0; i < colNb; i++) {
             				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
             				try {
-        						tableItem[i].setText(new String[] {""+(i+1),calc.getMean(i), calc.getMedian(i),calc.getStandDeviation(i),calc.getMin(i),calc.getMax(i),calc.getVariance(i),calc.getMode(i)});
+        						tableItem[i].setText(new String[] {""+(i+1),calc.getMean(i), calc.getMedian(i),calc.getStandDeviation(i),calc.getMin(i),calc.getMax(i),calc.getVariance(i), calc.getMode(i), calc.getVariance(i), calc.getMode(i)}); //A modifier pour faire la methode calc.Kmoy
         					} catch (Exception e1) {
         						e1.printStackTrace();
         					}
@@ -1328,6 +1341,197 @@ public class InterfaceApp {
             btnRegression.setToolTipText("Show regression line");
             
             
+            //Ajout du bouton KMoyennes
+            new Label(composite_3, SWT.NONE);
+            
+            Button btnModuleKMoy = new Button(composite_3, SWT.NONE);
+            btnModuleKMoy.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
+            btnModuleKMoy.addSelectionListener(new SelectionAdapter() {
+            	@Override
+            	public void widgetSelected(SelectionEvent e) {          		
+            		lblInfo.setText("K-Means Classification");
+            		
+            		//hide ... if active
+            		viewForm.setTopLeft(null);
+        				            
+            		String ItemTitle;
+            		int ActiveItem = getActiveTabItem(tabFolder); 
+					if (ActiveItem > 0)
+						ItemTitle = "K-Means Classification"+" |"+ActiveItem;
+					else
+						ItemTitle = "K-Means Classification";
+					
+            		tbtmResults.get(ActiveItem).setText(ItemTitle);
+            		tbtmResults.get(ActiveItem).setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
+            		//affichage des resultats
+            		scrolledComposite.get(ActiveItem).setExpandVertical(true);
+            		scrolledComposite.get(ActiveItem).setExpandHorizontal(true);
+            		
+            		
+            		tableRes.set(ActiveItem,  new Table(scrolledComposite.get(ActiveItem), SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI));
+            		tableRes.get(ActiveItem).setLinesVisible(true);
+            		tableRes.get(ActiveItem).setFont(SWTResourceManager.getFont("Times New Roman", 11, SWT.NORMAL));
+            		tableRes.get(ActiveItem).setHeaderVisible(true);
+            		
+            		TableColumn tblclmnColumns = new TableColumn(tableRes.get(ActiveItem), SWT.LEFT);
+            		tblclmnColumns.setResizable(false);
+            		tblclmnColumns.setWidth(40);
+            		tblclmnColumns.setText("");
+	                  
+            		
+           
+            		
+            	
+	                
+            		//si on a importe un fichier
+            		if(calc.fileImported()) {
+            			//we get col. number
+            			int colNb = dfp.getNbDataColumns();
+            			TableItem[] tableItem = new TableItem[colNb];
+            			org.eclipse.swt.graphics.Color red = display.getSystemColor(SWT.COLOR_RED);
+            			org.eclipse.swt.graphics.Color green = display.getSystemColor(SWT.COLOR_GREEN);
+            			org.eclipse.swt.graphics.Color gray = display.getSystemColor(SWT.COLOR_GRAY);
+            			org.eclipse.swt.graphics.Color blue= display.getSystemColor(SWT.COLOR_BLUE);
+            			org.eclipse.swt.graphics.Color yellow= display.getSystemColor(SWT.COLOR_YELLOW);
+            			org.eclipse.swt.graphics.Color darkgreen= display.getSystemColor(SWT.COLOR_DARK_GREEN);
+            			org.eclipse.swt.graphics.Color pink= display.getSystemColor(SWT.COLOR_DARK_MAGENTA);
+            			org.eclipse.swt.graphics.Color cyan= display.getSystemColor(SWT.COLOR_CYAN);
+            			org.eclipse.swt.graphics.Color darkcyan= display.getSystemColor(SWT.COLOR_DARK_CYAN);
+            			
+            			
+            			for(int i = 0; i < colNb; i++) {
+	            			TableColumn tblclmn = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
+	                		//tblclmnMoyenne.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMean.png"));
+	                		tblclmn.setWidth(100);
+	                		tblclmn.setText("Col"+(i+1));
+            			}
+            			
+            			for(int i = 0; i < colNb; i++) {
+            				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
+            				try {
+        						//tableItem[i].setText(new String[] {"Var"+(i+1),calc.getCoefCorl(i,0), calc.getCoefCorl(i,1),calc.getCoefCorl(i,2),calc.getCoefCorl(i,3)});
+            					tableItem[i].setText(new String[] {"class"+(i+1),calc.getCoefCorl(i,0), calc.getCoefCorl(i,1),calc.getCoefCorl(i,2),calc.getCoefCorl(i,3)});
+            					
+            						//double valcour = Integer.parseInt(tableItem[i].getText());
+            					
+            							
+            					
+        					} catch (Exception e1) {
+        						e1.printStackTrace();
+        					}
+            			}                		
+                		
+                		lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
+						lblInfo.setText("Displaying calcul stat for actual data file");
+            		}else {
+            			lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeWarning.png"));
+						lblInfo.setText("Error : No data found ! you must import a data file first !");
+            		}
+            		
+            		
+            		scrolledComposite.get(ActiveItem).setContent(tableRes.get(ActiveItem));
+            		scrolledComposite.get(ActiveItem).setMinSize(tableRes.get(ActiveItem).computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+            	}
+                              	
+            });
+            btnModuleKMoy.setSelection(true);
+            btnModuleKMoy.setText("K-Means");
+            btnModuleKMoy.setToolTipText("Show K-Means Classification");
+            
+            //Ajout du bouton CAH
+            
+            new Label(composite_3, SWT.NONE);
+            
+            Button btnModuleCah = new Button(composite_3, SWT.NONE);
+            btnModuleCah.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
+            btnModuleCah.addSelectionListener(new SelectionAdapter() {
+            	@Override
+            	public void widgetSelected(SelectionEvent e) {          		
+            		lblInfo.setText("CAH Classification");
+            		
+            		//hide ... if active
+            		viewForm.setTopLeft(null);
+        				            
+            		String ItemTitle;
+            		int ActiveItem = getActiveTabItem(tabFolder); 
+					if (ActiveItem > 0)
+						ItemTitle = "CAH Classification"+" |"+ActiveItem;
+					else
+						ItemTitle = "CAH Classification";
+					
+            		tbtmResults.get(ActiveItem).setText(ItemTitle);
+            		tbtmResults.get(ActiveItem).setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
+            		//affichage des resultats
+            		scrolledComposite.get(ActiveItem).setExpandVertical(true);
+            		scrolledComposite.get(ActiveItem).setExpandHorizontal(true);
+            		
+            		
+            		tableRes.set(ActiveItem,  new Table(scrolledComposite.get(ActiveItem), SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI));
+            		tableRes.get(ActiveItem).setLinesVisible(true);
+            		tableRes.get(ActiveItem).setFont(SWTResourceManager.getFont("Times New Roman", 11, SWT.NORMAL));
+            		tableRes.get(ActiveItem).setHeaderVisible(true);
+            		
+            		TableColumn tblclmnColumns = new TableColumn(tableRes.get(ActiveItem), SWT.LEFT);
+            		tblclmnColumns.setResizable(false);
+            		tblclmnColumns.setWidth(40);
+            		tblclmnColumns.setText("");           
+            		
+            	
+	                
+            		//si on a importe un fichier
+            		if(calc.fileImported()) {
+            			//we get col. number
+            			int colNb = dfp.getNbDataColumns();
+            			TableItem[] tableItem = new TableItem[colNb];
+            			org.eclipse.swt.graphics.Color red = display.getSystemColor(SWT.COLOR_RED);
+            			org.eclipse.swt.graphics.Color green = display.getSystemColor(SWT.COLOR_GREEN);
+            			org.eclipse.swt.graphics.Color gray = display.getSystemColor(SWT.COLOR_GRAY);
+            			org.eclipse.swt.graphics.Color blue= display.getSystemColor(SWT.COLOR_BLUE);
+            			org.eclipse.swt.graphics.Color yellow= display.getSystemColor(SWT.COLOR_YELLOW);
+            			org.eclipse.swt.graphics.Color darkgreen= display.getSystemColor(SWT.COLOR_DARK_GREEN);
+            			org.eclipse.swt.graphics.Color pink= display.getSystemColor(SWT.COLOR_DARK_MAGENTA);
+            			org.eclipse.swt.graphics.Color cyan= display.getSystemColor(SWT.COLOR_CYAN);
+            			org.eclipse.swt.graphics.Color darkcyan= display.getSystemColor(SWT.COLOR_DARK_CYAN);
+            			
+            			
+            			for(int i = 0; i < colNb; i++) {
+	            			TableColumn tblclmn = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
+	                		//tblclmnMoyenne.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMean.png"));
+	                		tblclmn.setWidth(100);
+	                		tblclmn.setText("Col"+(i+1));
+            			}
+            			
+            			//CAH a implementer ici
+            			for(int i = 0; i < colNb; i++) {
+            				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
+            				try {
+        						//tableItem[i].setText(new String[] {"Var"+(i+1),calc.getCoefCorl(i,0), calc.getCoefCorl(i,1),calc.getCoefCorl(i,2),calc.getCoefCorl(i,3)});
+            					tableItem[i].setText(new String[] {"class"+(i+1),calc.getCoefCorl(i,0), calc.getCoefCorl(i,1),calc.getCoefCorl(i,2),calc.getCoefCorl(i,3)});
+            					
+            						//double valcour = Integer.parseInt(tableItem[i].getText());            							
+            					
+        					} catch (Exception e1) {
+        						e1.printStackTrace();
+        					}
+            			}                		
+                		
+                		lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
+						lblInfo.setText("Displaying calcul stat for actual data file");
+            		}else {
+            			lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeWarning.png"));
+						lblInfo.setText("Error : No data found ! you must import a data file first !");
+            		}
+            		
+            		
+            		scrolledComposite.get(ActiveItem).setContent(tableRes.get(ActiveItem));
+            		scrolledComposite.get(ActiveItem).setMinSize(tableRes.get(ActiveItem).computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+            	}
+                              	
+            });
+            btnModuleCah.setSelection(true);
+            btnModuleCah.setText("CAH");
+            btnModuleCah.setToolTipText("Show CAH Classification");
+            
             final ToolBar toolBar = new ToolBar(composite_3, SWT.RIGHT);
             
             final ToolItem tltmDropdownItem = new ToolItem(toolBar, SWT.DROP_DOWN);
@@ -1432,7 +1636,7 @@ public class InterfaceApp {
             btnImportFile.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeImport.png"));
             btnImportFile.setToolTipText("Import data file");
             
-            
+            //SAUVEGARDE
             Button btnNewButton_3 = new Button(composite_3, SWT.FLAT);
             btnNewButton_3.addSelectionListener(new SelectionAdapter() {
             	@Override
@@ -1494,10 +1698,12 @@ public class InterfaceApp {
 		    		    		double[] tabMin = calc.getMins(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 		    		    		double[] tabMax = calc.getMaxs(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 		    		    		double[] tabVar = calc.getVariances(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
+		    		    		String[] tabKMoy = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
+		    		    		String[] tabClass = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 		    		    		String[] tabMode = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 		    		    		
 		    		    		if(title.equals("Statistical Calculs")) {
-		    		                corp.createTab(document, dfp.getNbDataColumns(), tabMean, tabMediane, tabSD, tabMin, tabMax, tabVar, tabMode);
+		    		                corp.createTab(document, dfp.getNbDataColumns(), tabMean, tabMediane, tabSD, tabMin, tabMax, tabVar, tabKMoy, tabClass, tabMode);
 		    		                try {
 		    		                 document.add(corp.paraHeader);
 		    		                 document.add(corp.paraIntro);

@@ -178,4 +178,44 @@ public class CalculStats {
 		  return result;
 		 }
 	
+	 	
+	 public static String KMoy(ValuesList listData){
+		  ValuesList freq = new ValuesList();
+		  ValuesList res = new ValuesList();
+		  String result = "";
+		  int size = listData.size();
+		  int nbMax=0;
+		  int tabMax[] = new int[size];
+
+		  for(int i = 0;i<size;i++){
+		   freq.add((double)listData.frequency(listData.get(i)));
+		  }
+
+		  for (int i = 0;i<size;i++){
+		   if(freq.get(i)==freq.maxValue()){
+			   tabMax[i] = i;
+			   nbMax++;
+		   }
+		   else {
+			   tabMax[i]=-1;
+			   nbMax++;
+		   }
+		  }
+		  
+		  for (int i = 0; i<nbMax;i++){
+		   if(tabMax[i]!=-1)
+		    if(!res.contains(listData.get(tabMax[i]))){
+		     res.add(listData.get(tabMax[i]));
+		    }
+		  }
+
+		  for(int i = 0;i<res.size();i++){
+		   result = result + res.get(i)+" ";
+		  }
+		  
+		  return result;
+		 }
+	
 }
+
+		

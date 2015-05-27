@@ -96,7 +96,7 @@ public class CorpPdf {
  }
  
  public void createTab(Document document, int nbColumn, double[] tabMean, double[] tabMediane, double[] tabSD,
-      double[] tabMin, double[] tabMax, double[] tabVar, String[] tabMode){
+      double[] tabMin, double[] tabMax, double[] tabVar, String[] tabKMoy, String[] tabClass, String[] tabMode){
 	  document.open();
 	  PdfPCell cell1 =  new PdfPCell(new Phrase("Columns", contenu));
 	  table.addCell(cell1);
@@ -119,8 +119,14 @@ public class CorpPdf {
 	  PdfPCell cell7 =  new PdfPCell(new Phrase("Variance", contenu));
 	  table.addCell(cell7);
 	  
-	  PdfPCell cell8 =  new PdfPCell(new Phrase("Mode", contenu));
+	  PdfPCell cell8 =  new PdfPCell(new Phrase("KMoy", contenu));
 	  table.addCell(cell8);
+	  
+	  PdfPCell cell9 =  new PdfPCell(new Phrase("Class", contenu));
+	  table.addCell(cell9);
+	  
+	  PdfPCell cell10 =  new PdfPCell(new Phrase("Mode", contenu));
+	  table.addCell(cell10);
   
   float[] columnWidths5 = {1.6f, 1.5f, 1.6f, 2.0f, 1.5f, 1.5f, 1.6f, 1.5f};
   
@@ -132,6 +138,8 @@ public class CorpPdf {
 	   table.addCell(new PdfPCell(new Phrase(""+tabMin[i-1])));
 	   table.addCell(new PdfPCell(new Phrase(""+tabMax[i-1])));
 	   table.addCell(new PdfPCell(new Phrase(""+tabVar[i-1])));
+	   table.addCell(new PdfPCell(new Phrase(""+tabKMoy[i-1])));
+	   table.addCell(new PdfPCell(new Phrase(""+tabClass[i-1])));
 	   table.addCell(new PdfPCell(new Phrase(""+tabMode[i-1])));
   }
   try {
