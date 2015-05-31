@@ -2,6 +2,8 @@ package ModStats;
 
 import java.util.ArrayList;
 
+import ModStats.Clustering.Repartition;
+
 
 public class DoCalculs {
 	
@@ -363,6 +365,20 @@ public class DoCalculs {
 		//0.23
 		return DB;
 	}
+	
+		
+	
+	
+	
+	
+	
+	
+	
+	//------------------- Private Tools ----------------
+	
+	
+	
+	
 
 	private static double getMaxValue(ArrayList<Double> calculMax) {
 		double max = 0;
@@ -387,6 +403,7 @@ public class DoCalculs {
 		
 		return mean;
 	}
+	
 	
 	private static double getBarycentre(ArrayList<Double> valuesList) {
 		double sum = 0;
