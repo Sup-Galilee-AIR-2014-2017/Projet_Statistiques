@@ -562,7 +562,8 @@ public class InterfaceApp {
 			    		    		
 			    		    		//double [][] tabCorel= calc.getCoefCorls(dfp.getNbDataColumns(),dfp.getNbDataColumns());
 			    		    		if(title.equals("Statistical Calculs")) {
-			    		                corp.createTab(document, dfp.getNbDataColumns(), tabMean, tabMediane, tabSD, tabMin, tabMax, tabVar, tabKMoy, tabClass, tabMode);
+			    		    			//TODO A_CHANGER
+			    		                //corp.createTab(document, dfp.getNbDataColumns(), tabMean, tabMediane, tabSD, tabMin, tabMax, tabVar, tabKMoy, tabClass, tabMode);
 			    		                try {
 			    		                 document.add(corp.paraHeader);
 			    		                 document.add(corp.paraIntro);
@@ -1762,7 +1763,8 @@ public class InterfaceApp {
 		    		    		String[] tabMode = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 		    		    		
 		    		    		if(title.equals("Statistical Calculs")) {
-		    		                corp.createTab(document, dfp.getNbDataColumns(), tabMean, tabMediane, tabSD, tabMin, tabMax, tabVar, tabKMoy, tabClass, tabMode);
+		    		    			//TODO A_CHANGER
+		    		                //corp.createTab(document, dfp.getNbDataColumns(), tabMean, tabMediane, tabSD, tabMin, tabMax, tabVar, tabKMoy, tabClass, tabMode);
 		    		                try {
 		    		                 document.add(corp.paraHeader);
 		    		                 document.add(corp.paraIntro);
