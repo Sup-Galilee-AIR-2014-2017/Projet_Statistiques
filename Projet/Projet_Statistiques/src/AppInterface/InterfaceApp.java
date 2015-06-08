@@ -1,5 +1,6 @@
 package AppInterface;
 
+
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -1379,15 +1380,16 @@ public class InterfaceApp {
             		tblclmnColumns.setText("");
 	                  
             		
-           
+            		//ArrayList<ArrayList<Double>> repartition = new ArrayList<ArrayList<Double>>();
             		
-            	
-	                
+            			                
             		//si on a importe un fichier
             		if(calc.fileImported()) {
             			//we get col. number
+            			
             			int colNb = dfp.getNbDataColumns();
-            			TableItem[] tableItem = new TableItem[colNb];
+            			
+            		
             			org.eclipse.swt.graphics.Color red = display.getSystemColor(SWT.COLOR_RED);
             			org.eclipse.swt.graphics.Color green = display.getSystemColor(SWT.COLOR_GREEN);
             			org.eclipse.swt.graphics.Color gray = display.getSystemColor(SWT.COLOR_GRAY);
@@ -1398,29 +1400,85 @@ public class InterfaceApp {
             			org.eclipse.swt.graphics.Color cyan= display.getSystemColor(SWT.COLOR_CYAN);
             			org.eclipse.swt.graphics.Color darkcyan= display.getSystemColor(SWT.COLOR_DARK_CYAN);
             			
+            		
             			
-            			for(int i = 0; i < colNb; i++) {
+            			InputObject io = DoCalculs.getIO();
+            			ArrayList<Double> valeurs =new ArrayList<Double>();
+            			
+            			for (int j=0; j < colNb; j++){
+            				
+	            			for(int i=0 ; i < io.getValuesList(j).size(); i++){
+	            				valeurs.add(io.getValuesList(j).get(i));
+	            			}
+            			}
+            			
+            			ArrayList<ArrayList<Double>> kmeans = new ArrayList<ArrayList<Double>>();
+            			kmeans = DoCalculs.K_Moyenne(valeurs, 3);
+            			
+            			
+            			
+            			/*for (int j=0; j < kmeans.size(); j++){
+            				
+	            			for(int i=0 ; i < moi.get(j).size(); i++){
+	            				resultats.add(moi.get(j).get(i));
+	            			}
+            			}*/
+            			
+            			
+            			for(int i = 0; i < kmeans.size(); i++) {
 	            			TableColumn tblclmn = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
 	                		//tblclmnMoyenne.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMean.png"));
 	                		tblclmn.setWidth(100);
-	                		tblclmn.setText("Col"+(i+1));
+	                		tblclmn.setText("Classe"+(i+1));
+            			}
+            				
+            			//GetNbLines
+            			int nbLinesMax = 0;
+            			for (ArrayList<Double> cluster : kmeans) {
+							int nbElementsInCluster = cluster.size();
+							if(nbElementsInCluster > nbLinesMax)
+								nbLinesMax = nbElementsInCluster;
+						}
+            			
+            			
+            			TableItem[] tableItem = new TableItem[valeurs.size()];
+            			
+            			
+            			
+            			for(int i = 0; i< nbLinesMax; i++) {
+            				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
+            				String [] valColonnes = new String[kmeans.size()+1];
+            				valColonnes[0] = ""+(i+1);
+            				
+            				for (int j = 0; j< kmeans.size(); j++) {
+            					ArrayList<Double> cluster = kmeans.get(j);
+								if(i < cluster.size() ) {//if i is not out of bound.
+									valColonnes[j+1] = ""+cluster.get(i);
+								}else
+									valColonnes[j+1] = "";
+							}
+            				
+            				tableItem[i].setText(valColonnes); //A modifier pour faire la methode calc.Kmoy
+        					
             			}
             			
-            			for(int i = 0; i < colNb; i++) {
+            			/*
+            			for(int i = 0; i < kmeans.size(); i++) {
             				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
             				try {
-        						//tableItem[i].setText(new String[] {"Var"+(i+1),calc.getCoefCorl(i,0), calc.getCoefCorl(i,1),calc.getCoefCorl(i,2),calc.getCoefCorl(i,3)});
-            					tableItem[i].setText(new String[] {"class"+(i+1),calc.getCoefCorl(i,0), calc.getCoefCorl(i,1),calc.getCoefCorl(i,2),calc.getCoefCorl(i,3)});
+            					for (int j=0; j < nbLinesMax; j++){
+            						
+            						
+            						
+            						
+        						tableItem[i].setText(new String[] {""+(i+1),kmeans.get(i).get(j).toString(),kmeans.get(i).get(j+1).toString(),kmeans.get(i).get(j+2).toString()}); //A modifier pour faire la methode calc.Kmoy
             					
-            						//double valcour = Integer.parseInt(tableItem[i].getText());
-            					
-            							
-            					
-        					} catch (Exception e1) {
+            					}
+            					} catch (Exception e1) {
         						e1.printStackTrace();
         					}
             			}                		
-                		
+                		*/
                 		lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
 						lblInfo.setText("Displaying calcul stat for actual data file");
             		}else {
@@ -1500,6 +1558,7 @@ public class InterfaceApp {
 	                		tblclmn.setWidth(100);
 	                		tblclmn.setText("Col"+(i+1));
             			}
+            			           			
             			
             			//CAH a implementer ici
             			for(int i = 0; i < colNb; i++) {

@@ -5,14 +5,21 @@ import java.util.ArrayList;
 
 public class DoCalculs {
 	
-	private InputObject io;
+	private static InputObject io;
 
 	
 	public void setInputData(InputObject in) {
 		io = in;
 	}
+	
+	public static InputObject getIO() {
+		if(fileImported())
+			return io;
+		else
+			return new InputObject();
+	}
 
-	public boolean fileImported() {
+	public static boolean fileImported() {
 			return (io != null);
 	}
 	
@@ -116,12 +123,14 @@ public class DoCalculs {
 			values.clear();
 			for(int j = 0; j < io.getValuesList(i).size(); j++) {
 				values.add(io.getValuesList(i).get(j));
+			
 			}
 			result[i] = CalculStats.mean(values);
 		}
 		
 		return result;
 	}
+	
 	
 	public String getMin(int col)  {
 		//InputObject lt = DoCalculs.getValues();
@@ -316,6 +325,248 @@ public class DoCalculs {
 		return result; 
 	}
 	
+	public static double getMinValueFromList(ArrayList<Double> liste) {
+		Double min = null;
+		for (Double val : liste) {
+			if(min == null || val < min)
+				min = val;
+		}
+		return min;
+	}
+	
+	public static double getMaxValueFromList(ArrayList<Double> liste) {
+		Double max = null;
+		for (Double val : liste) {
+			if(max == null || val > max)
+				max = val;
+		}
+		return max;
+	}
+	
+	public static ArrayList<ArrayList<Double>> K_Moyenne(ArrayList<Double> allElements, int k) {
+		
+		
+		
+		
+		ArrayList<ArrayList<Double>> clusters = new ArrayList<ArrayList<Double>>();
+		ArrayList<ArrayList<Double>> oldClusters = new ArrayList<ArrayList<Double>>();
+		
+		ArrayList<Double> centers = new ArrayList<Double>();
+		
+		double minValue = getMinValueFromList(allElements);
+		double maxValue = getMaxValueFromList(allElements);
+		
+		
+		for(int i = 0; i< k ; i++) {
+			double randomValue = minValue + Math.random()*maxValue;
+			centers.add(randomValue);
+			clusters.add(new ArrayList<Double>());
+		}
+		
+		
+		
+		//First affectation
+		for (Double element : allElements) {
+			
+			
+			Double minDistance = null;
+			int indiceCenterWithSmallestDistance = -1;
+			
+			for (int c = centers.size()-1; c >= 0 ; c--) {
+				
+				double center = centers.get(c);
+								
+				double distanceFromCenter = Math.abs(center - element);
+				
+				if(minDistance == null || distanceFromCenter < minDistance){
+					minDistance = distanceFromCenter;
+					indiceCenterWithSmallestDistance = c;
+				}
+				
+			}
+			
+			clusters.get(indiceCenterWithSmallestDistance).add(element);
+			
+		}
+		
+		//Test if a cluster is empty and remove it
+		for (ArrayList<Double> cluster : clusters) {
+			if (cluster.isEmpty())
+				clusters.remove(cluster);
+		}
+		
+				
+		
+		
+		while(compareLists(clusters, oldClusters) == false){
+			
+			
+			/*for (ArrayList<Double> cluster : oldClusters) {
+				DoCalculs.removed(cluster);
+			}*/
+			
+			oldClusters = new ArrayList<ArrayList<Double>>();
+			
+			for (int i=0 ; i< clusters.size(); i++) {
+				oldClusters.add(clusters.get(i));
+			}
+			
+			for (int i = 0 ; i < clusters.size(); i++) {
+				centers.set(i, DoCalculs.getBarycentre(clusters.get(i)));
+			}
+			
+			
+			for(int i = clusters.size()-1; i >= 0; i--) {
+				
+				ArrayList<Double> cluster = clusters.get(i);
+				
+				for (int j= cluster.size() -1; j >=0; j--) {
+				
+					Double elementCluster = cluster.get(j);
+					
+					Double minDistance = null;
+					int indiceCenterWithSmallestDistance = -1;
+					
+					for (int c = clusters.size()-1; c >= 0 ; c--) {
+												
+						double center = centers.get(c);
+						
+						
+						double distanceFromCenter = Math.abs(center - elementCluster);
+						
+						if(minDistance == null || distanceFromCenter < minDistance){
+							minDistance = distanceFromCenter;
+							indiceCenterWithSmallestDistance = c;
+						}
+						
+					}
+					
+					if(indiceCenterWithSmallestDistance != i) {
+						clusters.get(indiceCenterWithSmallestDistance).add(cluster.get(j));
+						cluster.remove(j);
+												
+					}
+				}
+				
+			}
+			
+			
+				
+			
+		}
+		
+		
+		
+		
+		
+		
+		/*
+		
+		
+		ArrayList<Double> C1 =new ArrayList<Double>();
+		ArrayList<Double> Cl1 =new ArrayList<Double>();
+		ArrayList<Double> C2 =new ArrayList<Double>();
+		ArrayList<Double> Cl2 =new ArrayList<Double>();
+		ArrayList<Double> C3 =new ArrayList<Double>();
+		ArrayList<Double> Cl3 =new ArrayList<Double>();
+		double M1=1,M2=2,M3=3;
+		
+		for (int i =0 ; i< valeurs.size(); i++){
+			if(Math.abs(valeurs.get(i)-M1)<Math.abs(valeurs.get(i)-M2) && Math.abs(valeurs.get(i)-M1)<Math.abs(valeurs.get(i)-M3))
+				C1.add(valeurs.get(i));
+			
+			else if(Math.abs(valeurs.get(i)-M2)<Math.abs(valeurs.get(i)-M1) && Math.abs(valeurs.get(i)-M2)<Math.abs(valeurs.get(i)-M3))
+				C2.add(valeurs.get(i));
+			
+			else if(Math.abs(valeurs.get(i)-M3)<Math.abs(valeurs.get(i)-M1) && Math.abs(valeurs.get(i)-M3)<Math.abs(valeurs.get(i)-M2))
+				
+			C3.add(valeurs.get(i));
+		}
+		
+		
+		while(DoCalculs.compare(C1, Cl1) ==false || DoCalculs.compare(C2, Cl2) ==false || DoCalculs.compare(C3, Cl3)==false){
+			DoCalculs.removed(Cl1);
+			DoCalculs.removed(Cl2);
+			DoCalculs.removed(Cl3);
+			
+			Cl1.addAll(C1);
+			Cl2.addAll(C2);
+			Cl3.addAll(C3);
+			
+			M1=DoCalculs.getBarycentre(C1);
+			M2=DoCalculs.getBarycentre(C2);
+			M3=DoCalculs.getBarycentre(C3);
+			
+			for (int i =0 ; i< C1.size(); i++){
+				if(Math.abs(C1.get(i)-M1)<Math.abs(C1.get(i)-M2) && Math.abs(C1.get(i)-M1)<Math.abs(C1.get(i)-M3));
+				
+				else if(Math.abs(C1.get(i)-M2)<Math.abs(C1.get(i)-M1) && Math.abs(C1.get(i)-M2)<Math.abs(valeurs.get(i)-M3)){
+					C2.add(C1.get(i));
+					C1.remove(i);
+				}
+				
+				else if(Math.abs(C1.get(i)-M3)<Math.abs(C1.get(i)-M1) && Math.abs(C1.get(i)-M3)<Math.abs(C1.get(i)-M2)){
+					
+				C3.add(C1.get(i));
+				C1.remove(i);
+				}
+			}
+			
+			for (int i =0 ; i< C2.size(); i++){
+				if(Math.abs(C2.get(i)-M1)<Math.abs(C2.get(i)-M2) && Math.abs(C2.get(i)-M1)<Math.abs(C2.get(i)-M3)){
+				C1.add(C2.get(i));
+				C2.remove(i);
+				}
+			
+				else if(Math.abs(C2.get(i)-M2)<Math.abs(C2.get(i)-M1) && Math.abs(C2.get(i)-M2)<Math.abs(C2.get(i)-M3)){
+					;
+				}
+				
+				else if(Math.abs(C2.get(i)-M3)<Math.abs(C2.get(i)-M1) && Math.abs(C2.get(i)-M3)<Math.abs(C2.get(i)-M2)){
+					
+				C3.add(C2.get(i));
+				C2.remove(i);
+				}
+			}
+			
+			for (int i =0 ; i< C3.size(); i++){
+				if(Math.abs(C3.get(i)-M1)<Math.abs(C3.get(i)-M2) && Math.abs(C3.get(i)-M1)<Math.abs(C3.get(i)-M3)){
+					C1.add(C3.get(i));
+					C3.remove(i);
+				}
+				
+				else if(Math.abs(C3.get(i)-M2)<Math.abs(C3.get(i)-M1) && Math.abs(C3.get(i)-M2)<Math.abs(C3.get(i)-M3)){
+					C2.add(C3.get(i));
+					C3.remove(i);
+				}
+				
+				else if(Math.abs(C3.get(i)-M3)<Math.abs(C3.get(i)-M1) && Math.abs(C3.get(i)-M3)<Math.abs(C3.get(i)-M2))
+					
+				;
+				
+			}
+			
+			
+			
+		}*/
+		
+		
+		return clusters;
+	}
+	
+	private static ArrayList<ArrayList<Double>> Clone(ArrayList<ArrayList<Double>> clusters) {
+
+		ArrayList<ArrayList<Double>> list= new ArrayList<ArrayList<Double>>();
+		for (ArrayList<Double> cluster : clusters) {
+			ArrayList<Double> dList = new ArrayList<Double>();
+			for (Double val : cluster) {
+				dList.add(val);
+			}
+			list.add(dList);
+		}
+		return list;
+	}
+
 	public String[] getModes(int NbCol) {
 		String[] result = new String[NbCol];
 		
@@ -331,6 +582,7 @@ public class DoCalculs {
 		}
 		
 		return result; 
+		
 	}
 	
 	public static double getDaviesBouldinIndice(ArrayList<ArrayList<Double>> repartition) {
@@ -388,14 +640,89 @@ public class DoCalculs {
 		return mean;
 	}
 	
-	private static double getBarycentre(ArrayList<Double> valuesList) {
-		double sum = 0;
+	public static double getBarycentre(ArrayList<Double> valuesList) {
+		double sum = 0, barycentre;
 		for (Double element : valuesList) {
 			sum += element;
 		}		
 		
-		double barycentre = sum / valuesList.size();
+		barycentre = sum/valuesList.size();
 		return barycentre;
+	}
+
+
+	public static boolean rchr(double var, ArrayList<Double> list) {
+		
+		boolean trouve=false;
+		
+			for (int j=0 ; j < list.size(); j++) {
+				
+						if (var == list.get(j)){
+						
+							trouve = true;	
+						}			
+			}						
+		
+		return trouve;
+	}
+	
+	public static boolean compare(ArrayList<Double> cmp1, ArrayList<Double> cmp2) {
+		ArrayList<Double> cmp11= new ArrayList<Double>();
+		boolean cmp=true;
+	
+		
+		if (cmp1.size() == cmp2.size()){
+			cmp11.addAll(cmp1);
+		
+			for (int i=0 ; i < cmp2.size(); i++) {
+				
+						if (rchr(cmp2.get(i), cmp11)==true){
+						
+							cmp11.remove(cmp2.get(i));
+						}
+						
+						else {
+							cmp=false;
+							break;
+						}
+			}	
+						
+		}	
+		
+		else {
+			cmp=false;
+		}
+		
+		return cmp;
+	}
+	
+	public static boolean compareLists(ArrayList<ArrayList<Double>> cmp1, ArrayList<ArrayList<Double>> cmp2) {
+		boolean cmp=true;	
+		
+		if(cmp1.size() == cmp2.size()) {
+			for (int i = 0; i< cmp1.size(); i++) {
+				if(!compare(cmp1.get(i), cmp2.get(i))) {
+					cmp = false;
+					break;
+				}
+			}
+		}else {
+			cmp = false;
+		}
+		
+		return cmp;
+	}
+	
+	public static void removed(ArrayList<Double> liste) {
+		
+		if (liste.size() >0){	
+			
+			for (int i=liste.size()-1 ; i >=0 ; i--) {
+				liste.remove(i);		
+			}
+			
+		}
+		else;
 	}
 	
 
