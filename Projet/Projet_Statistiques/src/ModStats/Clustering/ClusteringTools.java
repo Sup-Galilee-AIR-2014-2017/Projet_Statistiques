@@ -2,16 +2,18 @@ package ModStats.Clustering;
 
 import java.util.ArrayList;
 
+import ModStats.DoCalculs;
 
+//Before using the cluster methods, we have to check that there is no missing data before calling these methods.
 public class ClusteringTools {
 	
 	public static class CoupleElements { public ArrayList<Double[]> Element1, Element2;} // Couple of two groups of elements
 		
 	
 	// A Double[] type variable is a point (an element or a line in the input text file)
-	public static ArrayList<ArrayList<Double[]>> HierarchicalClustering(ArrayList<Double[]> elementsList) {
+	public static Repartition HierarchicalClustering(ArrayList<Double[]> elementsList) {
 		
-		//TODO Gérer les effets de bord
+		//TODO Gï¿½rer les effets de bord
 		
 		ArrayList<Repartition> repartitionsList = new ArrayList<Repartition>();
 		CoupleElements coupleNearSets = new CoupleElements();
@@ -63,14 +65,13 @@ public class ClusteringTools {
 			}
 		}		
 		
-		return bestRepartition.getAllClusters();
+		return bestRepartition;
 	}
 	
 	public static double getDaviesBouldinIndice(Repartition repartition) {
 		double DB = 0;
 		
-		//TODO écrire le commentaire du dessous en anglais
-		int k = repartition.getNbClusters(); //ici, k vaut le nombre de groupes (pas sur, k doit peut être être le nombre de centres définis aléatoirement tout au début dde l'algo).
+		int k = repartition.getNbClusters(); //ici, k vaut le nombre de groupes (pas sur, k doit peut ï¿½tre ï¿½tre le nombre de centres dï¿½finis alï¿½atoirement tout au dï¿½but dde l'algo).
 
 		for(int i=0; i< k; i++) {
 			ArrayList<Double[]> group = repartition.getCluster(i);
@@ -96,6 +97,162 @@ public class ClusteringTools {
 		DB = DB / k;
 
 		return DB;
+	}
+	
+	
+	public static Repartition K_Mean(ArrayList<Double[]> allElements) {
+		ArrayList<Repartition> repartitionsList = new ArrayList<Repartition>();
+		ArrayList<Double> daviesBouldinIndicesList = new ArrayList<Double>();
+		Repartition bestRepartition = null;
+		
+		
+		for(int k = 2; k <= 50; k++) {
+			Repartition repartition = K_MeanForK(allElements, k);
+			Double daviesIndice = getDaviesBouldinIndice(repartition);
+			
+			repartitionsList.add(repartition);
+			daviesBouldinIndicesList.add(daviesIndice);
+		}
+		
+		//Retrieve the best repartition
+		Double bestIndice = null;
+		for (int i = 0; i < repartitionsList.size(); i++) {
+			Double currentIndiceDavies = daviesBouldinIndicesList.get(i);
+			if(bestIndice == null || currentIndiceDavies < bestIndice){
+				bestIndice = currentIndiceDavies;
+				bestRepartition = repartitionsList.get(i);
+			}				
+		}
+		
+		if(bestRepartition.getNbClusters() != 2)
+			System.out.println();
+		
+		return bestRepartition != null ? bestRepartition : new Repartition(); //It could be null if the input list of the function was empty, but it shouldn't happen
+	}
+	
+	public static Repartition K_MeanForK(ArrayList<Double[]> allElements, int k) {
+				
+		
+		
+		Repartition clusters = new Repartition();
+		Repartition oldClusters = new Repartition();
+		
+		ArrayList<Double []> centers = new ArrayList<Double []>();
+		
+		Double [] minValue = getMinValueFromList(allElements);
+		Double [] maxValue = getMaxValueFromList(allElements); 
+		
+		//Add k random elements (centers) to the center list.
+		for(int i = 0; i< k ; i++) {
+			Double [] randomElement = new Double[minValue.length];
+			
+			for (int j = 0; j < randomElement.length; j++) {
+				Double randomValue = minValue[j] + Math.random()*maxValue[j];
+				randomElement[j] = randomValue;
+			}
+			
+			centers.add(randomElement);
+			clusters.addCluster(new ArrayList<Double[]>());
+		}
+		
+		//First affectation
+		for (Double [] element : allElements) {
+			
+			
+			Double minDistance = null;
+			int indiceCenterWithSmallestDistance = -1;
+			
+			for (int c = centers.size()-1; c >= 0 ; c--) {
+				
+				Double [] center = centers.get(c);
+				
+
+				double distanceFromCenter = distanceBetweenTwoElements(center, element);
+				
+				if(minDistance == null || distanceFromCenter < minDistance){
+					minDistance = distanceFromCenter;
+					indiceCenterWithSmallestDistance = c;
+				}
+				
+			}
+			
+			clusters.getCluster(indiceCenterWithSmallestDistance).add(element);
+			
+		}
+		
+		
+		
+		//Test if a cluster is empty and remove it
+		Repartition clustersToRemove = new Repartition();
+		for (ArrayList<Double []> cluster : clusters.getAllClusters()) {
+			if (cluster.isEmpty())
+				clustersToRemove.addCluster(cluster);
+				//clusters.removeCluster(cluster);
+		}
+		clusters.removeAllClusters(clustersToRemove);
+		
+				
+		
+		
+		while(comparePartitions(clusters, oldClusters) == false){
+			
+			
+			/*for (ArrayList<Double> cluster : oldClusters) {
+				DoCalculs.removed(cluster);
+			}*/
+			
+			oldClusters = new Repartition();
+			
+			for (int i=0 ; i< clusters.getNbClusters(); i++) {
+				oldClusters.addCluster(clusters.getCluster(i));
+			}
+			
+			for (int i = 0 ; i < clusters.getNbClusters(); i++) {
+				centers.set(i, getBarycentre(clusters.getCluster(i)));
+			}
+			
+			
+			for(int i = clusters.getNbClusters()-1; i >= 0; i--) {
+				
+				ArrayList<Double []> cluster = clusters.getCluster(i);
+				
+				for (int j= cluster.size() -1; j >=0; j--) {
+				
+					Double [] elementCluster = cluster.get(j);
+					
+					Double minDistance = null;
+					int indiceCenterWithSmallestDistance = -1;
+					
+					for (int c = clusters.getNbClusters()-1; c >= 0 ; c--) {
+												
+						Double [] center = centers.get(c);
+						
+
+						double distanceFromCenter = distanceBetweenTwoElements(center, elementCluster);
+						
+						if(minDistance == null || distanceFromCenter < minDistance){
+							minDistance = distanceFromCenter;
+							indiceCenterWithSmallestDistance = c;
+						}
+						
+					}
+					
+					if(indiceCenterWithSmallestDistance != i) {
+						clusters.getCluster(indiceCenterWithSmallestDistance).add(cluster.get(j));
+						cluster.remove(j);
+												
+					}
+				}
+				
+			}
+			
+			
+				
+			
+		}
+				
+		
+		return clusters;
 	}
 		
 		
@@ -167,7 +324,7 @@ public class ClusteringTools {
 
 	public static double distanceBetweenTwoElements(Double [] point1, Double [] point2) {
 		double distance = 0;
-		//TODO s'assurer que les deux elements sont de même dimensions
+
 		int tabDimension = point1.length;
 		for (int i = 0; i< tabDimension; i++) {
 			distance += Math.pow(point2[i] - point1[i], 2);
@@ -199,4 +356,130 @@ public class ClusteringTools {
 		}
 		return max;
 	}
+	
+	// Return a double [] with the min value by array indice (comparing each attribute) of the list. 
+	public static Double [] getMinValueFromList(ArrayList<Double[]> liste) {
+		
+		if(liste.size() > 0) {
+			int sizeOfValueArray = liste.get(0).length;
+			Double [] min = new Double[sizeOfValueArray];
+			
+			// initialize all values to null;
+			for (int i = 0; i <sizeOfValueArray; i++) {
+				min[i] = null;
+			}
+			
+			for (int i = 0; i < sizeOfValueArray; i++) {
+				
+				Double minValForAttribute = null;
+				
+				for(int j = 0; j < liste.size(); j++){
+					double attributeValue = liste.get(j)[i];
+					if(minValForAttribute == null || attributeValue < minValForAttribute)
+						minValForAttribute = attributeValue;
+				}
+				
+				min[i] = minValForAttribute;
+			}
+			return min;			
+		}else 
+			return new Double [0];
+
+	}
+	
+	public static Double [] getMaxValueFromList(ArrayList<Double[]> liste) {
+		
+		if(liste.size() > 0) {
+			int sizeOfValueArray = liste.get(0).length;
+			Double [] max = new Double[sizeOfValueArray];
+			
+			// initialize all values to null;
+			for (int i = 0; i <sizeOfValueArray; i++) {
+				max[i] = null;
+			}
+			
+			for (int i = 0; i < sizeOfValueArray; i++) {
+				
+				Double maxValForAttribute = null;
+				
+				for(int j = 0; j < liste.size(); j++){
+					double attributeValue = liste.get(j)[i];
+					if(maxValForAttribute == null || attributeValue > maxValForAttribute)
+						maxValForAttribute = attributeValue;
+				}
+				
+				max[i] = maxValForAttribute;
+			}
+			return max;			
+		}else 
+			return new Double [0];
+		
+	}
+	
+
+	private static boolean comparePartitions(Repartition cmp1, Repartition cmp2) {
+		boolean cmp=true;	
+		
+		if(cmp1.getNbClusters() == cmp2.getNbClusters()) {
+			for (int i = 0; i< cmp1.getNbClusters(); i++) {
+				if(!compareClusters(cmp1.getCluster(i), cmp2.getCluster(i))) {
+					cmp = false;
+					break;
+				}
+			}
+		}else {
+			cmp = false;
+		}
+		
+		return cmp;
+	}
+	
+
+	public static boolean compareClusters(ArrayList<Double []> cmp1, ArrayList<Double []> cmp2) {
+		ArrayList<Double []> cmp11= new ArrayList<Double []>();
+		boolean cmp=true;
+	
+		
+		if (cmp1.size() == cmp2.size()){
+			cmp11.addAll(cmp1);
+		
+			for (int i=0 ; i < cmp2.size(); i++) {
+				
+						if (rchr(cmp2.get(i), cmp11)==true){
+						
+							cmp11.remove(cmp2.get(i));
+						}
+						
+						else {
+							cmp=false;
+							break;
+						}
+			}	
+						
+		}	
+		
+		else {
+			cmp=false;
+		}
+		
+		return cmp;
+	}
+	
+	//Research a 'var' value from 'list' and return true if it is found.
+	public static boolean rchr(Double [] var, ArrayList<Double []> list) {
+		
+		boolean trouve=false;
+		
+			for (int j=0 ; j < list.size(); j++) {
+				
+						if (var == list.get(j)){
+						
+							trouve = true;	
+						}			
+			}						
+		
+		return trouve;
+	}
+	
+	
 }

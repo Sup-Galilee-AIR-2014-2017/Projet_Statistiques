@@ -59,6 +59,9 @@ import DATA_And_Files_Propreties.DataAndFilesProprieties;
 import ExportPDF.CorpPdf;
 import ModStats.DoCalculs;
 import ModStats.InputObject;
+import ModStats.ValuesList;
+import ModStats.Clustering.ClusteringTools;
+import ModStats.Clustering.Repartition;
 import ModVisual.HistoG;
 import ModVisual.ScatterPlot_1;
 
@@ -1385,7 +1388,7 @@ public class InterfaceApp {
             		
             			                
             		//si on a importe un fichier
-            		if(calc.fileImported()) {
+            		if(calc.fileImported() && dfp.getNbMissingData()  == 0) {
             			//we get col. number
             			
             			int colNb = dfp.getNbDataColumns();
@@ -1404,17 +1407,21 @@ public class InterfaceApp {
             		
             			
             			InputObject io = DoCalculs.getIO();
-            			ArrayList<Double> valeurs =new ArrayList<Double>();
+            			ArrayList<Double[]> valeurs =new ArrayList<Double[]>();
             			
-            			for (int j=0; j < colNb; j++){
+            			for (int j=0; j < io.getSize(); j++){
+            				ValuesList lineElement = io.getValuesList(j);
+            				Double [] element = new Double [colNb];
             				
-	            			for(int i=0 ; i < io.getValuesList(j).size(); i++){
-	            				valeurs.add(io.getValuesList(j).get(i));
+            				for(int i=0 ; i < colNb; i++){
+	            				element[i] = lineElement.get(i);
 	            			}
+            				
+            				valeurs.add(element);
             			}
             			
-            			ArrayList<ArrayList<Double>> kmeans = new ArrayList<ArrayList<Double>>();
-            			kmeans = DoCalculs.K_Moyenne(valeurs, 3);
+            			Repartition kmeans = new Repartition();
+            			kmeans = ClusteringTools.K_MeanForK(valeurs, 3);
             			
             			
             			
@@ -1426,7 +1433,7 @@ public class InterfaceApp {
             			}*/
             			
             			
-            			for(int i = 0; i < kmeans.size(); i++) {
+            			for(int i = 0; i < kmeans.getNbClusters(); i++) {
 	            			TableColumn tblclmn = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
 	                		//tblclmnMoyenne.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMean.png"));
 	                		tblclmn.setWidth(100);
@@ -1435,7 +1442,7 @@ public class InterfaceApp {
             				
             			//GetNbLines
             			int nbLinesMax = 0;
-            			for (ArrayList<Double> cluster : kmeans) {
+            			for (ArrayList<Double[]> cluster : kmeans.getAllClusters()) {
 							int nbElementsInCluster = cluster.size();
 							if(nbElementsInCluster > nbLinesMax)
 								nbLinesMax = nbElementsInCluster;
@@ -1448,15 +1455,26 @@ public class InterfaceApp {
             			
             			for(int i = 0; i< nbLinesMax; i++) {
             				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
-            				String [] valColonnes = new String[kmeans.size()+1];
+            				String [] valColonnes = new String[kmeans.getNbClusters()+1];
             				valColonnes[0] = ""+(i+1);
             				
-            				for (int j = 0; j< kmeans.size(); j++) {
-            					ArrayList<Double> cluster = kmeans.get(j);
-								if(i < cluster.size() ) {//if i is not out of bound.
-									valColonnes[j+1] = ""+cluster.get(i);
-								}else
-									valColonnes[j+1] = "";
+            				for (int j = 0; j< kmeans.getNbClusters(); j++) {
+            					ArrayList<Double[]> cluster = kmeans.getCluster(j);
+            					String valuePrinted = "";
+            					
+            					if(i < cluster.size() ) {//if i is not out of bound. => For dynamic printing line values for classes with more value than others.
+									Double [] element = cluster.get(i);
+																		
+									// Add all the Double[] values into a String.
+									for (Double valAttribute :  element) {
+										valuePrinted += " - " + valAttribute;
+									}
+									
+									valuePrinted = valuePrinted.substring(3);
+								}
+
+								valColonnes[j+1] = valuePrinted;
+            					
 							}
             				
             				tableItem[i].setText(valColonnes); //A modifier pour faire la methode calc.Kmoy
@@ -1484,7 +1502,10 @@ public class InterfaceApp {
 						lblInfo.setText("Displaying calcul stat for actual data file");
             		}else {
             			lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeWarning.png"));
-						lblInfo.setText("Error : No data found ! you must import a data file first !");
+						if(!calc.fileImported())
+							lblInfo.setText("Error : No data found ! you must import a data file first !");
+						else
+							lblInfo.setText("Error : A data is missing so you can't start this module!");
             		}
             		
             		
@@ -1533,15 +1554,19 @@ public class InterfaceApp {
             		TableColumn tblclmnColumns = new TableColumn(tableRes.get(ActiveItem), SWT.LEFT);
             		tblclmnColumns.setResizable(false);
             		tblclmnColumns.setWidth(40);
-            		tblclmnColumns.setText("");           
+            		tblclmnColumns.setText("");
+	                  
             		
-            	
-	                
+            		//ArrayList<ArrayList<Double>> repartition = new ArrayList<ArrayList<Double>>();
+            		
+            			                
             		//si on a importe un fichier
-            		if(calc.fileImported()) {
+            		if(calc.fileImported() && dfp.getNbMissingData()  == 0) {
             			//we get col. number
+            			
             			int colNb = dfp.getNbDataColumns();
-            			TableItem[] tableItem = new TableItem[colNb];
+            			
+            		
             			org.eclipse.swt.graphics.Color red = display.getSystemColor(SWT.COLOR_RED);
             			org.eclipse.swt.graphics.Color green = display.getSystemColor(SWT.COLOR_GREEN);
             			org.eclipse.swt.graphics.Color gray = display.getSystemColor(SWT.COLOR_GRAY);
@@ -1552,40 +1577,115 @@ public class InterfaceApp {
             			org.eclipse.swt.graphics.Color cyan= display.getSystemColor(SWT.COLOR_CYAN);
             			org.eclipse.swt.graphics.Color darkcyan= display.getSystemColor(SWT.COLOR_DARK_CYAN);
             			
+            		
             			
-            			for(int i = 0; i < colNb; i++) {
+            			InputObject io = DoCalculs.getIO();
+            			ArrayList<Double[]> valeurs =new ArrayList<Double[]>();
+            			
+            			for (int j=0; j < io.getSize(); j++){
+            				ValuesList lineElement = io.getValuesList(j);
+            				Double [] element = new Double [colNb];
+            				
+            				for(int i=0 ; i < colNb; i++){
+	            				element[i] = lineElement.get(i);
+	            			}
+            				
+            				valeurs.add(element);
+            			}
+            			
+            			Repartition cahRepartition = new Repartition();
+            			cahRepartition = ClusteringTools.HierarchicalClustering(valeurs);
+            			
+            			
+            			
+            			/*for (int j=0; j < kmeans.size(); j++){
+            				
+	            			for(int i=0 ; i < moi.get(j).size(); i++){
+	            				resultats.add(moi.get(j).get(i));
+	            			}
+            			}*/
+            			
+            			
+            			for(int i = 0; i < cahRepartition.getNbClusters(); i++) {
 	            			TableColumn tblclmn = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
 	                		//tblclmnMoyenne.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMean.png"));
 	                		tblclmn.setWidth(100);
-	                		tblclmn.setText("Col"+(i+1));
+	                		tblclmn.setText("Classe"+(i+1));
             			}
-            			           			
+            				
+            			//GetNbLines
+            			int nbLinesMax = 0;
+            			for (ArrayList<Double[]> cluster : cahRepartition.getAllClusters()) {
+							int nbElementsInCluster = cluster.size();
+							if(nbElementsInCluster > nbLinesMax)
+								nbLinesMax = nbElementsInCluster;
+						}
             			
-            			//CAH a implementer ici
-            			for(int i = 0; i < colNb; i++) {
+            			
+            			TableItem[] tableItem = new TableItem[valeurs.size()];
+            			
+            			
+            			
+            			for(int i = 0; i< nbLinesMax; i++) {
+            				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
+            				String [] valColonnes = new String[cahRepartition.getNbClusters()+1];
+            				valColonnes[0] = ""+(i+1);
+            				
+            				for (int j = 0; j< cahRepartition.getNbClusters(); j++) {
+            					ArrayList<Double[]> cluster = cahRepartition.getCluster(j);
+            					String valuePrinted = "";
+            					
+            					if(i < cluster.size() ) {//if i is not out of bound. => For dynamic printing line values for classes with more value than others.
+									Double [] element = cluster.get(i);
+																		
+									// Add all the Double[] values into a String.
+									for (Double valAttribute :  element) {
+										valuePrinted += " - " + valAttribute;
+									}
+									
+									valuePrinted = valuePrinted.substring(3);
+								}
+
+								valColonnes[j+1] = valuePrinted;
+            					
+							}
+            				
+            				tableItem[i].setText(valColonnes); //A modifier pour faire la methode calc.Kmoy
+        					
+            			}
+            			
+            			/*
+            			for(int i = 0; i < kmeans.size(); i++) {
             				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
             				try {
-        						//tableItem[i].setText(new String[] {"Var"+(i+1),calc.getCoefCorl(i,0), calc.getCoefCorl(i,1),calc.getCoefCorl(i,2),calc.getCoefCorl(i,3)});
-            					tableItem[i].setText(new String[] {"class"+(i+1),calc.getCoefCorl(i,0), calc.getCoefCorl(i,1),calc.getCoefCorl(i,2),calc.getCoefCorl(i,3)});
+            					for (int j=0; j < nbLinesMax; j++){
+            						
+            						
+            						
+            						
+        						tableItem[i].setText(new String[] {""+(i+1),kmeans.get(i).get(j).toString(),kmeans.get(i).get(j+1).toString(),kmeans.get(i).get(j+2).toString()}); //A modifier pour faire la methode calc.Kmoy
             					
-            						//double valcour = Integer.parseInt(tableItem[i].getText());            							
-            					
-        					} catch (Exception e1) {
+            					}
+            					} catch (Exception e1) {
         						e1.printStackTrace();
         					}
             			}                		
-                		
+                		*/
                 		lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
 						lblInfo.setText("Displaying calcul stat for actual data file");
             		}else {
             			lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeWarning.png"));
-						lblInfo.setText("Error : No data found ! you must import a data file first !");
+						if(!calc.fileImported())
+							lblInfo.setText("Error : No data found ! you must import a data file first !");
+						else
+							lblInfo.setText("Error : A data is missing so you can't start this module!");
             		}
             		
             		
             		scrolledComposite.get(ActiveItem).setContent(tableRes.get(ActiveItem));
             		scrolledComposite.get(ActiveItem).setMinSize(tableRes.get(ActiveItem).computeSize(SWT.DEFAULT, SWT.DEFAULT));	
-            	}
+            	}	
+            	
                               	
             });
             btnModuleCah.setSelection(true);

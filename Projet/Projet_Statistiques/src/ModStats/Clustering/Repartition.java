@@ -30,5 +30,13 @@ public class Repartition {
 	public ArrayList<ArrayList<Double[]>> getAllClusters() {
 		return this.repartition;
 	}
+
+	public void removeCluster(ArrayList<Double[]> cluster) {
+		this.repartition.remove(cluster);
+	}
+	
+	public void removeAllClusters(Repartition clusters) {
+		this.repartition.removeAll(clusters.getAllClusters());
+	}
 	
 }

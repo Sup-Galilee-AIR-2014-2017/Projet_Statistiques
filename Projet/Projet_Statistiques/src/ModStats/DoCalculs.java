@@ -327,6 +327,7 @@ public class DoCalculs {
 		return result; 
 	}
 	
+	//TODO TO REMOVE
 	public static double getMinValueFromList(ArrayList<Double> liste) {
 		Double min = null;
 		for (Double val : liste) {
@@ -336,6 +337,7 @@ public class DoCalculs {
 		return min;
 	}
 	
+	//TODO TO REMOVE
 	public static double getMaxValueFromList(ArrayList<Double> liste) {
 		Double max = null;
 		for (Double val : liste) {
@@ -344,7 +346,7 @@ public class DoCalculs {
 		}
 		return max;
 	}
-	
+	/*
 	public static ArrayList<ArrayList<Double>> K_Moyenne(ArrayList<Double> allElements, int k) {
 		
 		
@@ -402,10 +404,6 @@ public class DoCalculs {
 		
 		while(compareLists(clusters, oldClusters) == false){
 			
-			
-			/*for (ArrayList<Double> cluster : oldClusters) {
-				DoCalculs.removed(cluster);
-			}*/
 			
 			oldClusters = new ArrayList<ArrayList<Double>>();
 			
@@ -552,9 +550,9 @@ public class DoCalculs {
 			
 		}*/
 		
-		
+	/*	
 		return clusters;
-	}
+	}*/
 	
 	private static ArrayList<ArrayList<Double>> Clone(ArrayList<ArrayList<Double>> clusters) {
 
@@ -586,11 +584,11 @@ public class DoCalculs {
 		return result; 
 		
 	}
-	
+	/*
 	public static double getDaviesBouldinIndice(ArrayList<ArrayList<Double>> repartition) {
 		double DB = 0;
 		
-		int k = repartition.size(); //ici, k vaut le nombre de groupes (pas sur, k doit peut être être le nombre de centres définis aléatoirement tout au début dde l'algo).
+		int k = repartition.size(); //ici, k vaut le nombre de groupes (pas sur, k doit peut ï¿½tre ï¿½tre le nombre de centres dï¿½finis alï¿½atoirement tout au dï¿½but dde l'algo).
 
 		for(int i=0; i< k; i++) {
 			ArrayList<Double> group = repartition.get(i);
@@ -617,7 +615,7 @@ public class DoCalculs {
 		//0.23
 		return DB;
 	}
-	
+	*/
 		
 	
 	
@@ -640,7 +638,7 @@ public class DoCalculs {
 		}
 		return max;
 	}
-
+/*
 	private static double getMeanDistanceElementToBarycentreOfGroup(ArrayList<Double> group) {
 		
 		double barycentreGroup = getBarycentre(group);
@@ -667,7 +665,7 @@ public class DoCalculs {
 		return barycentre;
 	}
 
-
+// TO REMOVE
 	public static boolean rchr(double var, ArrayList<Double> list) {
 		
 		boolean trouve=false;
@@ -683,6 +681,7 @@ public class DoCalculs {
 		return trouve;
 	}
 	
+	//TODO TO REMOVE
 	public static boolean compare(ArrayList<Double> cmp1, ArrayList<Double> cmp2) {
 		ArrayList<Double> cmp11= new ArrayList<Double>();
 		boolean cmp=true;
@@ -712,7 +711,8 @@ public class DoCalculs {
 		
 		return cmp;
 	}
-	
+
+	//TODO TO REMOVE
 	public static boolean compareLists(ArrayList<ArrayList<Double>> cmp1, ArrayList<ArrayList<Double>> cmp2) {
 		boolean cmp=true;	
 		
@@ -729,7 +729,7 @@ public class DoCalculs {
 		
 		return cmp;
 	}
-	
+	*/
 	public static void removed(ArrayList<Double> liste) {
 		
 		if (liste.size() >0){	

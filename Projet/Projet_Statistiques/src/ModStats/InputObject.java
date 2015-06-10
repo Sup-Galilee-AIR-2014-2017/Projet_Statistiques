@@ -34,6 +34,10 @@ public class InputObject {
 		return Data.get(index);
 	}
 	
+	public int getSize() {
+		return Data.size();
+	}
+	
 	/**
 	 * 
 	 * @return
