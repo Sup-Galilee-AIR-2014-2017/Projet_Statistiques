@@ -4,13 +4,13 @@
 	<classpathentry kind="src" path="tests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="C:/Users/Rayanox/Dropbox/All/Etudes/IngenieurSupGalilee/Cours/Projet/Projet/Librairies/com.ibm.icu_4.4.2.v20110823.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Rayanox/Dropbox/All/Etudes/IngenieurSupGalilee/Cours/Projet/Projet/Librairies/itextpdf-5.1.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Rayanox/Dropbox/All/Etudes/IngenieurSupGalilee/Cours/Projet/Projet/Librairies/jcommon-1.0.16.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Rayanox/Dropbox/All/Etudes/IngenieurSupGalilee/Cours/Projet/Projet/Librairies/jfreechart-1.0.14.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Rayanox/Dropbox/All/Etudes/IngenieurSupGalilee/Cours/Projet/Projet/Librairies/jfreechart-1.0.14-swt.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Rayanox/Dropbox/All/Etudes/IngenieurSupGalilee/Cours/Projet/Projet/Librairies/org.eclipse.swt.win32.win32.x86_64_3.7.1.v3738a.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Rayanox/Dropbox/All/Etudes/IngenieurSupGalilee/Cours/Projet/Projet/Librairies/rescimg.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Rayanox/Dropbox/All/Etudes/IngenieurSupGalilee/Cours/Projet/Projet/Librairies/swing2swt.jar"/>
+	<classpathentry kind="lib" path="/export/home/users/ingenieurs/infoAppr2015/11204296/git/Projet_Statitstiques/Projet/Librairies/com.ibm.icu_4.4.2.v20110823.jar"/>
+	<classpathentry kind="lib" path="/export/home/users/ingenieurs/infoAppr2015/11204296/git/Projet_Statitstiques/Projet/Librairies/itextpdf-5.1.3.jar"/>
+	<classpathentry kind="lib" path="/export/home/users/ingenieurs/infoAppr2015/11204296/git/Projet_Statitstiques/Projet/Librairies/jcommon-1.0.16.jar"/>
+	<classpathentry kind="lib" path="/export/home/users/ingenieurs/infoAppr2015/11204296/git/Projet_Statitstiques/Projet/Librairies/jfreechart-1.0.14.jar"/>
+	<classpathentry kind="lib" path="/export/home/users/ingenieurs/infoAppr2015/11204296/git/Projet_Statitstiques/Projet/Librairies/jfreechart-1.0.14-swt.jar"/>
+	<classpathentry kind="lib" path="/export/home/users/ingenieurs/infoAppr2015/11204296/git/Projet_Statitstiques/Projet/Librairies/org.eclipse.swt.win32.win32.x86_64_3.7.1.v3738a.jar"/>
+	<classpathentry kind="lib" path="/export/home/users/ingenieurs/infoAppr2015/11204296/git/Projet_Statitstiques/Projet/Librairies/rescimg.jar"/>
+	<classpathentry kind="lib" path="/export/home/users/ingenieurs/infoAppr2015/11204296/git/Projet_Statitstiques/Projet/Librairies/swing2swt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

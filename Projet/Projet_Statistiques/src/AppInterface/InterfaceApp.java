@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.awt.*; 
+import java.awt.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -72,48 +72,48 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 /**
  * <h1>Interface principale de l'application</h1>
- * 
- *  
+ *
+ *
  * @author Chery Maeva
  * @author Adam Y.
  * @version 2.1 / 18.05.2013
- * @since december 2012 
+ * @since december 2012
  *
  */
 
 public class InterfaceApp {
-	
+
 	 /**
 	  * @wbp.parser.entryPoint
 	  */
-	
+
 	final Display display = new Display();//.getDefault();
     final Shell shell = new Shell(display);
-	
+
 	 /**
 	  * @wbp.parser.entryPoint
 	  */
 	 public  void GraphicalInterface(boolean home) {
-	    	
+
 	        shell.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/logo_app_projet_grande.png"));
-	        
+
 	        shell.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		    shell.setMinimumSize(new Point(130, 20));
 		    shell.setModified(true);
 		    shell.setSize(820, 600);
 		    shell.setText("STATISTICAL APPLICATION");
 		    shell.setLayout(new BorderLayout(3, 1));
-		    
-		   
+
+
 		    //
 		    final DoCalculs calc = new DoCalculs();
 		    final DataAndFilesProprieties dfp = new DataAndFilesProprieties();
 		    final AppProgressBar  pb = new AppProgressBar(shell,SWT.NONE);
-		    
+
 		    //final boolean end = false;
 		    final JFreeChart[] chart = new JFreeChart[100];
 		    final JFreeChart[] sp_chart = new JFreeChart[100];
-		    
+
 		    final List<ScrolledComposite> scrolledComposite = new ArrayList<ScrolledComposite>();
 		    final List<Table> tableRes = new ArrayList<Table>();
 		    final List<TabItem> tbtmResults = new ArrayList<TabItem>();
@@ -121,62 +121,62 @@ public class InterfaceApp {
 		    final TabFolder tabFolder = new TabFolder(viewForm, SWT.NONE);
 		    tabFolder.setForeground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		    viewForm.setTopCenterSeparate(true);
-		    
-		    
+
+
 		    final Group grpInfo = new Group(shell, SWT.SHADOW_ETCHED_OUT);
 	        grpInfo.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 	        grpInfo.setFont(SWTResourceManager.getFont("Times New Roman", 12, SWT.NORMAL));
 	        grpInfo.setText("Informations");
 	        grpInfo.setLayoutData(BorderLayout.SOUTH);
 	        grpInfo.setLayout(new FillLayout(SWT.HORIZONTAL));
-		    
+
 		    final CLabel lblInfo = new CLabel(grpInfo, SWT.SHADOW_IN);
 		    lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
 		    lblInfo.setBottomMargin(5);
 		    lblInfo.setTopMargin(7);
 		    lblInfo.setText("About home");
-		     
+
 		     /******************************************************************************************************************/
-            
-		     
+
+
 		     final Composite composite_barreChoixHG = new Composite(viewForm, SWT.NONE);
-		     
+
 //		     viewForm.setTopLeft(composite_barreChoixHG);
 		     composite_barreChoixHG.setLayout(new FillLayout(SWT.HORIZONTAL));
-		     
+
 		     Group grpChoixDesColonnes = new Group(composite_barreChoixHG, SWT.SHADOW_OUT);
 		     grpChoixDesColonnes.setText("Choix du colonne et du Nb de Lignes");
 		     GridLayout gl_grpChoixDesColonnes = new GridLayout(1, false);
 		     gl_grpChoixDesColonnes.marginWidth = 1;
 		     grpChoixDesColonnes.setLayout(gl_grpChoixDesColonnes);
-		     
-		     
+
+
 		     Composite composite = new Composite(grpChoixDesColonnes, SWT.NONE);
 		     composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		     GridLayout gl_composite = new GridLayout(6, false);
 		     gl_composite.horizontalSpacing = 15;
 		     composite.setLayout(gl_composite);
-		     
+
 		     Label lblColToShow = new Label(composite, SWT.HORIZONTAL | SWT.CENTER);
 		     lblColToShow.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		     lblColToShow.setFont(SWTResourceManager.getFont("Tahoma", 8, SWT.NORMAL));
 		     lblColToShow.setText("Column to show :");
-		     
+
 		     final Combo combo = new Combo(composite, SWT.NONE | SWT.READ_ONLY);
 		     combo.setText("Column");
-		     
+
 		     Label lblNbOfLines = new Label(composite, SWT.NONE);
 		     lblNbOfLines.setAlignment(SWT.CENTER);
 		     lblNbOfLines.setText("Interval of Lines to show :");
-		     
+
 		     final Spinner spinner = new Spinner(composite, SWT.BORDER | SWT.READ_ONLY);
 		     final Spinner spinner_1 = new Spinner(composite, SWT.BORDER | SWT.READ_ONLY);
-		     
+
 		     GridData gd_spinner = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		     gd_spinner.widthHint = 32;
 		     spinner.setLayoutData(gd_spinner);
-		     
-		     
+
+
 		     //pour faire à ce que le max d'ici soit le min de  l'autre
 		     spinner.addSelectionListener(new SelectionAdapter() {
 		     public void widgetSelected(SelectionEvent e) {
@@ -184,18 +184,18 @@ public class InterfaceApp {
 		           spinner_1.setMinimum(selection+1);
 		         }
 		     });
-		     
+
 		     spinner.setMaximum(1);
 		     spinner.setMinimum(1);
-		     
-		     
+
+
 		     GridData gd_spinner_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		     gd_spinner_1.widthHint = 32;
 		     spinner_1.setLayoutData(gd_spinner_1);
-		     
+
 		     spinner_1.setMaximum(1);
 		     spinner_1.setMinimum(1);
-		     
+
 		     Button btnValider = new Button(composite, SWT.CENTER);
 		     GridData gd_btnValider = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		     gd_btnValider.heightHint = 23;
@@ -213,33 +213,33 @@ public class InterfaceApp {
 			     		if(ColNum >= 0) {
 			     			//get data
 				     		InputObject lt = dfp.getData();
-				     				     		
+
 				     		//get values
 							double[] value = new double[(LastLine-FirstLine)+1];
-							
+
 				     		try {
 								for(int j = 0; j < (LastLine-FirstLine)+1; j++) {
 									value[j] = lt.getValuesList(ColNum).get(j+FirstLine);
 								}
-								
+
 							} catch (Exception e1) {
 								e1.printStackTrace();
 								lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeWarning.png"));
 								lblInfo.setText("Error : Failed to get data !");
 							}
-				     		
+
 				     		//content
 				     		final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 				     		HistoG histogramme = new HistoG(dataset, "Histogram", "Values", "Number", PlotOrientation.VERTICAL);
 				     		histogramme.addValues(value,ColNum+1);
 				     		chart[ActiveItem] = histogramme.createChart();
-				     		
+
 				     		ChartComposite frame = new ChartComposite(scrolledComposite.get(ActiveItem), SWT.NONE, chart[ActiveItem], true);
 				     		//frame.setSize(300, 300);
-				     		
+
 				     		scrolledComposite.get(ActiveItem).setContent(frame);
 				            scrolledComposite.get(ActiveItem).setMinSize(frame.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-				            
+
 				            lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
 				      		lblInfo.setText("Histogram for the column "+(ColNum+1)+", from the line "+(FirstLine+1)+" to the line "+(LastLine+1));
 			     		}else {
@@ -250,21 +250,21 @@ public class InterfaceApp {
             			lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeWarning.png"));
 						lblInfo.setText("Error : No data found ! you must import a data file first !");
             		}
-		     			
+
 		     	}
 		     });
 		     btnValider.setText("Validate");
 		     btnValider.setToolTipText("Validate your choice");
-		     
+
 		     /****************************END HG BEGIN SP*********************************************************************************/
-		     
+
 		     final Composite composite_barreChoixSP = new Composite(viewForm, SWT.NONE);
 	            composite_barreChoixSP.setLayout(new FillLayout(SWT.HORIZONTAL));
-	           
+
 	            Group grpChoixDesColonnes_1 = new Group(composite_barreChoixSP, SWT.NONE);
 	            grpChoixDesColonnes_1.setText("Choix Des Colonnes et du Couleur");
 	            grpChoixDesColonnes_1.setLayout(new GridLayout(1, false));
-	            
+
 	            Composite composite_1 = new Composite(grpChoixDesColonnes_1, SWT.NONE);
 	            GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 	            gd_composite_1.widthHint = 736;
@@ -272,35 +272,35 @@ public class InterfaceApp {
 	            GridLayout gl_composite_1 = new GridLayout(13, false);
 	            gl_composite_1.horizontalSpacing = 15;
 	            composite_1.setLayout(gl_composite_1);
-	            
+
 	            Label lblCoordonnees = new Label(composite_1, SWT.NONE);
 	            lblCoordonnees.setBounds(0, 0, 49, 13);
 	            lblCoordonnees.setText("Coordonnees :");
-	            
+
 	            Label lblX = new Label(composite_1, SWT.CENTER);
 	            lblX.setFont(SWTResourceManager.getFont("Tahoma", 8, SWT.BOLD));
 	            lblX.setBounds(0, 0, 49, 13);
 	            lblX.setText("X :");
-	            
+
 	            final Spinner spinner_2 = new Spinner(composite_1, SWT.BORDER | SWT.READ_ONLY);
-	            
+
 	            Label label_2 = new Label(composite_1, SWT.NONE);
 	            label_2.setText("Y :");
 	            label_2.setFont(SWTResourceManager.getFont("Tahoma", 8, SWT.BOLD));
 	            final Spinner spinner_3 = new Spinner(composite_1, SWT.BORDER | SWT.READ_ONLY);
-	            
+
 	            spinner_2.setBounds(0, 0, 46, 21);
 	            spinner_2.setMaximum(0);
 	            spinner_2.setMinimum(0);
-	            
-	            
+
+
 	            spinner_3.setBounds(0, 0, 46, 21);
 	            spinner_3.setMaximum(0);
 	            spinner_3.setMinimum(0);
 	            new Label(composite_1, SWT.NONE);
-	            
+
 	            final ScatterPlot_1[] scatter = new ScatterPlot_1[100];
-	            
+
 	            Button btnValidateSP = new Button(composite_1, SWT.NONE);
 	            GridData gd_btnValidateSP = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 	            gd_btnValidateSP.heightHint = 23;
@@ -309,31 +309,35 @@ public class InterfaceApp {
 	            btnValidateSP.addSelectionListener(new SelectionAdapter() {
 			     	@Override
 			     	public void widgetSelected(SelectionEvent e) {
-			     		
+
+			     		InputObject [] clusters = dfp.getDataByObject();
+
 			     		if(calc.fileImported()) {
 				     		int ActiveItem = getActiveTabItem(tabFolder);
 				     		scatter[ActiveItem] = new ScatterPlot_1();
-	
-				     		scatter[ActiveItem].setInputObject(dfp.getDataByObject());
+
+
+
+				     		scatter[ActiveItem].setInputObject(clusters);
 			                int in = 0;
-			                for(InputObject inob : dfp.getDataByObject()) {
+			                for(InputObject inob : clusters) {
 			                	double[] val1 = new double[inob.getValuesList(spinner_2.getSelection()-1).size()];
 			                	for(int i = 0; i < inob.getValuesList(spinner_2.getSelection()-1).size(); i++)
 			                		val1[i] = inob.getValuesList(spinner_2.getSelection()-1).get(i);
-			                	
+
 			                	double[] val2 = new double[inob.getValuesList(spinner_3.getSelection()-1).size()];
 			                	for(int i = 0; i < inob.getValuesList(spinner_3.getSelection()-1).size(); i++)
 			                		val2[i] = inob.getValuesList(spinner_3.getSelection()-1).get(i);
-			                	
+
 			                	scatter[ActiveItem].addValues(scatter[ActiveItem].series[in], val1, val2);
 			                	in++;
 			                }
-			                
-			                
+
+
 			                sp_chart[ActiveItem] = scatter[ActiveItem].createChart(dfp.getNbObjectFound(),spinner_2.getSelection(),spinner_3.getSelection());
-			                
+
 			                ChartComposite frame = new ChartComposite(scrolledComposite.get(ActiveItem),SWT.NONE,sp_chart[ActiveItem],true);
-			                
+
 			                scrolledComposite.get(ActiveItem).setContent(frame);
 			                scrolledComposite.get(ActiveItem).setMinSize(frame.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			     		}else {
@@ -342,20 +346,20 @@ public class InterfaceApp {
 	            		}
 			     	}
 	            });
-	            
+
 	            btnValidateSP.setText("Validate ");
 	            btnValidateSP.setToolTipText("Validate your choice");
 	            new Label(composite_1, SWT.NONE);
 	            new Label(composite_1, SWT.NONE);
 	            new Label(composite_1, SWT.NONE);
-	            
+
 	            final Combo combo_1 = new Combo(composite_1, SWT.NONE);
 	            GridData gd_combo_1 = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
 	            gd_combo_1.widthHint = 113;
 	            combo_1.setLayoutData(gd_combo_1);
 	            combo_1.setText("text");
 	            new Label(composite_1, SWT.NONE);
-	            
+
 	            Button btnChooseColor = new Button(composite_1, SWT.NONE);
 	            btnChooseColor.addSelectionListener(new SelectionAdapter() {
 			     	@Override
@@ -369,14 +373,14 @@ public class InterfaceApp {
 			     	      if(index >=0)
 			     	    	  scatter[ActiveItem].changeColor(index, color);
 			     	   }
-			     	
-			     	}	
-			     	    
+
+			     	}
+
 	                });
 	            btnChooseColor.setText("Choose Color");
-		     
+
 		     /***********************************************************END SP*******************************************************************/
-		     
+
 		     //ceci permet de detecter l'onglet courant et ...
 		     tabFolder.addSelectionListener(new SelectionAdapter() {
 	            	@Override
@@ -394,26 +398,26 @@ public class InterfaceApp {
 	            			viewForm.setTopLeft(composite_barreChoixSP);
 	            		else
 	            			viewForm.setTopLeft(null);
-	            		
+
 	            	}
 	            });
-		     
-		   
+
+
 		    /***********************************BEGIN MENU *****************************************************************************/
 
-	         
+
 	        Menu menu = new Menu(shell, SWT.BAR);
 	        shell.setMenuBar(menu);
-	         
+
 	        MenuItem mntmFile_1 = new MenuItem(menu, SWT.CASCADE);
 	        mntmFile_1.setText("File");
-	         
+
 	        Menu menu_1 = new Menu(mntmFile_1);
 	        mntmFile_1.setMenu(menu_1);
-	         
+
 	        MenuItem mntmImporterDonnee = new MenuItem(menu_1, SWT.NONE);
 	        mntmImporterDonnee.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeImport.png"));
-	          
+
 	        mntmImporterDonnee.addSelectionListener(new SelectionAdapter() {
 	      	@Override
 	      	public void widgetSelected(SelectionEvent e) {
@@ -421,19 +425,19 @@ public class InterfaceApp {
 	      		FileDialog dialog = new FileDialog(shell, SWT.OPEN);
 	      		dialog.setFilterExtensions(new String[] { "*.*" });
 	      		nomFichier = dialog.open();
-	      		
+
  	      		if(nomFichier != null) {
 	      			Display.getDefault().asyncExec(new Runnable() {
 	      				public void run() {
-	      				
+
 							try {
 								pb.open();
 							} catch (InterruptedException e) {
 								e.printStackTrace();
-							}							
+							}
     	      			}
 	      			});
-	      			
+
     	      		//set file
 	      			try {
 						dfp.setFilePropreties(nomFichier);
@@ -441,21 +445,21 @@ public class InterfaceApp {
 						lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeWarning.png"));
 						lblInfo.setText("Error : Failed to set file propreties !");
 					}
-	      			
+
     	      		dfp.setDataFile();
     	      		calc.setInputData(dfp.getData());
     			     int Nblines = 1;
     			     Nblines = dfp.getNbLines();
     			     spinner.setMinimum(1);
     			     spinner.setMaximum(Nblines);
-    			     
+
     			     spinner_1.setMinimum(1);
     			     spinner_1.setMaximum(Nblines);
-    			     
-    			     
+
+
     			     int NbCol = 0;
     			     NbCol = dfp.getNbDataColumns();
-    			     
+
     			     if(NbCol > 0) {
 				    	 String[] items = new String[NbCol];
 				    	 for(int i=0; i < NbCol; i++) {
@@ -476,13 +480,13 @@ public class InterfaceApp {
     	      			pb.setEnd();
     			    }
  	      		}
-	      		
-	      		
+
+
 	      	}
 	      });
 	          mntmImporterDonnee.setText("Import data");
-	          
-	         
+
+
 	          MenuItem mntmImporterModule = new MenuItem(menu_1, SWT.NONE);
 	          mntmImporterModule.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeImport.png"));
 	          mntmImporterModule.addSelectionListener(new SelectionAdapter() {
@@ -493,47 +497,47 @@ public class InterfaceApp {
 	  	      	}
 	          });
 	          mntmImporterModule.setText("Import Module");
-	          
+
 	          new MenuItem(menu_1, SWT.SEPARATOR);
-	          
+
 	          /*******************************************************************************************************************/
-	          
+
 	          MenuItem mntmExportToPdf = new MenuItem(menu_1, SWT.NONE);
 	          mntmExportToPdf.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconePdf.png"));
 	          mntmExportToPdf.addSelectionListener(new SelectionAdapter() {
 	            	@Override
 	            	public void widgetSelected(SelectionEvent e) {
-	            		
+
 	            		if(calc.fileImported()) {
 		            		String nomFichier;
 		    	      		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
-		    	      		
+
 		    	      		//to get the tan name
 		    	      		int ActiveItem = getActiveTabItem(tabFolder);
 		    	      		StringTokenizer st = new StringTokenizer(tbtmResults.get(ActiveItem).getText(),"|");
 		    	      		String title = st.nextToken();
-		    	      		
+
 	    	      			dialog.setFileName("Export_"+title);
-		    	      		
-	    	      			if(title.equals("Statistical Calculs") || title.startsWith("Histogram") || title.startsWith("Scatter Plot") || title.equals("Corellation Matrix")) {	
+
+	    	      			if(title.equals("Statistical Calculs") || title.startsWith("Histogram") || title.startsWith("Scatter Plot") || title.equals("Corellation Matrix")) {
 			    	      		dialog.setFilterExtensions(new String[] { "*.*" });
 			    	      		nomFichier = dialog.open();
-			    	      		
-			    	      		
+
+
 			    	      		//exportation
 			    	      		if(nomFichier != null) {
 			    	      			File f = new File(nomFichier);
 				    	      		if(f.exists()) {
 				    	      			f.delete();
 				    	      		}
-			    	      			
+
 			    	      			CorpPdf corp = new CorpPdf("STATICAL CALCULS SUMMARY", dfp.getNbLines(), dfp.getNbDataColumns(), dfp.getNbObjectFound(), dfp.getObjectNames(), dfp.getNbMissingData());
 			    		    		Document document = new Document();
-			    		    		
+
 			    		    		//test si bon extension
 			    		    		if(nomFichier.endsWith(".pdf")) {
 			    		    			try {
-			        		    			PdfWriter.getInstance(document, 
+			        		    			PdfWriter.getInstance(document,
 			        		    				new FileOutputStream(nomFichier));
 			        		    		} catch (FileNotFoundException e1) {
 			        		    			e1.printStackTrace();
@@ -543,7 +547,7 @@ public class InterfaceApp {
 			    		    		}else {
 			    		    			nomFichier = nomFichier.concat(".pdf");
 			    		    			try {
-			        		    			PdfWriter.getInstance(document, 
+			        		    			PdfWriter.getInstance(document,
 			        		    				new FileOutputStream(nomFichier));
 			        		    		} catch (FileNotFoundException e1) {
 			        		    			e1.printStackTrace();
@@ -551,7 +555,7 @@ public class InterfaceApp {
 			        		    			e1.printStackTrace();
 			        		    		}
 			    		    		}
-			    		    		
+
 			    		    		//get all result
 			    		    		double[] tabMean = calc.getMeans(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 			    		    		double[] tabMediane = calc.getMedians(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
@@ -562,7 +566,7 @@ public class InterfaceApp {
 			    		    		String[] tabKMoy = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 			    		    		String[] tabClass = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 			    		    		String[] tabMode = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
-			    		    		
+
 			    		    		//double [][] tabCorel= calc.getCoefCorls(dfp.getNbDataColumns(),dfp.getNbDataColumns());
 			    		    		if(title.equals("Statistical Calculs")) {
 			    		    			//TODO A_CHANGER
@@ -573,12 +577,12 @@ public class InterfaceApp {
 			    		                 document.add(corp.paraResume);
 			    		                 document.add(corp.paraResume1);
 			    		                 document.add(corp.paraResume2);
-			    		                 
+
 			    		                 document.add(corp.paraResume4);
 			    		                 //for(int i=0;i<dfp.getNbObjectFound();i++){
 			    		                  document.add(corp.paraResume5);
 			    		                 //}
-			    		                 
+
 			    		                 document.add(corp.paraResume7);
 			    		                 document.add(corp.table);
 			    		                } catch (DocumentException ex) {
@@ -586,7 +590,7 @@ public class InterfaceApp {
 			    		                }
 			    		                document.close();
 			    		    			}
-			    		                
+
 			    		              /**  else if(title.equals("Corellation Matrix")) {
 				    		                corp.createTabCorel(document, dfp.getNbDataColumns(), dfp.getNbDataColumns(), tabCorel );
 				    		                try {
@@ -595,12 +599,12 @@ public class InterfaceApp {
 				    		                 document.add(corp.paraResume);
 				    		                 document.add(corp.paraResume1);
 				    		                 document.add(corp.paraResume2);
-				    		                 
+
 				    		                 document.add(corp.paraResume4);
 				    		                 //for(int i=0;i<dfp.getNbObjectFound();i++){
 				    		                  document.add(corp.paraResume5);
 				    		                 //}
-				    		                 
+
 				    		                 document.add(corp.paraResume7);
 				    		                 document.add(corp.table);
 				    		                } catch (DocumentException ex) {
@@ -616,19 +620,19 @@ public class InterfaceApp {
 			    		                 document.add(corp.paraResume);
 			    		                 document.add(corp.paraResume1);
 			    		                 document.add(corp.paraResume2);
-			    		                 
+
 			    		                 document.add(corp.paraResume4);
 			    		                 //for(int i=0;i<dfp.getNbObjectFound();i++){
 			    		                  document.add(corp.paraResume5);
 			    		                 //}
-			    		                 
+
 			    		                 document.add(corp.paraResume8);
 			    		                 document.add(corp.table);
 			    		                } catch (DocumentException ex) {
 			    		                 ex.printStackTrace();
 			    		                }
 			    		                corp.createImage(chart[ActiveItem], document);
-			    		                document.close(); 
+			    		                document.close();
 			    		    		}else if(title.equals("Scatter Plot")) {
 			    		                try {
 			          		                 document.open();
@@ -637,12 +641,12 @@ public class InterfaceApp {
 			          		                 document.add(corp.paraResume);
 			          		                 document.add(corp.paraResume1);
 			          		                 document.add(corp.paraResume2);
-			          		                 
+
 			          		                 document.add(corp.paraResume4);
 			          		                 //for(int i=0;i<dfp.getNbObjectFound();i++){
 			          		                  document.add(corp.paraResume5);
 			          		                 //}
-			          		                 
+
 			          		                 document.add(corp.paraResume9);
 			          		                 document.add(corp.table);
 			          		                } catch (DocumentException ex) {
@@ -654,7 +658,7 @@ public class InterfaceApp {
 			    		    		lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
 			    	      			lblInfo.setText("*** The results was succefully exported  ***");
 			    	      		}
-			    		    		
+
 		    	      		}else {
 		    	      			lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeWarning.png"));
 								lblInfo.setText("Error : No data found ! you must import a data file first !");
@@ -666,12 +670,12 @@ public class InterfaceApp {
 	            	}
 	          });
 	          mntmExportToPdf.setText("Export to PDF");
-	          
+
 	          new MenuItem(menu_1, SWT.SEPARATOR);
-	         
-	          
+
+
 	          MenuItem mntmQuit = new MenuItem(menu_1, SWT.NONE);
-	          
+
 	          mntmQuit.addSelectionListener(new SelectionAdapter() {
 	          	@Override
 	          	public void widgetSelected(SelectionEvent e) {
@@ -679,17 +683,17 @@ public class InterfaceApp {
 	          	}
 	          });
 	          mntmQuit.setText("Quit");
-	         
+
 	          final MenuItem mntmHelp = new MenuItem(menu, SWT.CASCADE);
 	          mntmHelp.setText("Help");
-	         
+
 	          Menu menu_2 = new Menu(mntmHelp);
 	          mntmHelp.setMenu(menu_2);
-	         
+
 	          MenuItem mntmHelp_1 = new MenuItem(menu_2, SWT.NONE);
 	          mntmHelp_1.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/Iconhelp.png"));
 	          mntmHelp_1.setText("Help");//TODO
-	         
+
 	          MenuItem mntmAbout = new MenuItem(menu_2, SWT.NONE);
 	          mntmAbout.addSelectionListener(new SelectionAdapter() {
 	            	@Override
@@ -700,11 +704,11 @@ public class InterfaceApp {
 	            });
 	          mntmAbout.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
 	          mntmAbout.setText("About");
-	          
+
 	          /*******************************************************END MENU******************************************/
-	          
+
 	          /****************************************************BAR MENU START **************************************/
-	          
+
 	          final Menu menu_n = new Menu(shell, SWT.POP_UP);
 	          MenuItem menu1 = new MenuItem(menu_n, SWT.PUSH);
 	          menu1.addSelectionListener(new SelectionAdapter() {
@@ -712,71 +716,71 @@ public class InterfaceApp {
 	          	public void widgetSelected(SelectionEvent e) {
 	          		lblInfo.setText("Histogram graphic");
 	          		int ActiveItem = getActiveTabItem(tabFolder);
-	          		
+
 	          		String ItemTitle;
-	          		
+
 					if (ActiveItem > 0)
 						ItemTitle = "Histogram"+" |"+ActiveItem;
 					else
 						ItemTitle = "Histogram";
-					
+
 	          		tbtmResults.get(ActiveItem).setText(ItemTitle);
             		tbtmResults.get(ActiveItem).setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeHisto.png"));
-            		
+
             		scrolledComposite.get(ActiveItem).setExpandVertical(true);
     	            scrolledComposite.get(ActiveItem).setExpandHorizontal(true);
-    	            
+
     	            viewForm.setTopLeft(composite_barreChoixHG);
 	          	}
 	          });
 	          menu1.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeHisto.png"));
 	          menu1.setText("Histogram");
-	          
-	          
+
+
 	          MenuItem menu2 = new MenuItem(menu_n, SWT.PUSH);
 	          menu2.addSelectionListener(new SelectionAdapter() {
 	          	@Override
 	          	public void widgetSelected(SelectionEvent e) {
 	          		lblInfo.setText("Scatter Plot graphic");
 	          		int ActiveItem = getActiveTabItem(tabFolder);
-	          		
+
 	          		String ItemTitle;
-	          		
+
 					if (ActiveItem > 0)
 						ItemTitle = "Scatter Plot"+" |"+ActiveItem;
 					else
 						ItemTitle = "Scatter Plot";
-	          		
+
 	          		tbtmResults.get(ActiveItem).setText(ItemTitle);
             		tbtmResults.get(ActiveItem).setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeScatterPlot.png"));
-            		
+
     	            scrolledComposite.get(ActiveItem).setExpandVertical(true);
     	            scrolledComposite.get(ActiveItem).setExpandHorizontal(true);
-    	            
+
             		viewForm.setTopLeft(composite_barreChoixSP);
 	          	}
 	          });
 	          menu2.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeScatterPlot.png"));
-	          menu2.setText("Scatter Plot");        
-        
-	          
+	          menu2.setText("Scatter Plot");
+
+
 	          /**
 	           * La barre contenant les boutons Mod stat visualisation etc....
-	           * 
-	           */	          
+	           *
+	           */
 	          Composite composite_3 = new Composite(shell, SWT.BORDER);
 	          composite_3.setLayoutData(BorderLayout.NORTH);
 	          composite_3.setLayout(new GridLayout(17, false));
-            
+
 	          Button button = new Button(composite_3, SWT.NONE);
             button.addSelectionListener(new SelectionAdapter() {
             	@Override
             	public void widgetSelected(SelectionEvent e) {
-            		
-	          		int ActiveItem = getActiveTabItem(tabFolder); 
-	          		
+
+	          		int ActiveItem = getActiveTabItem(tabFolder);
+
 	          		StyledText  styledText = new StyledText(scrolledComposite.get(ActiveItem), SWT.READ_ONLY);
-	    		    
+
 	    		    styledText.setFont(SWTResourceManager.getFont("Times New Roman", 12, SWT.NORMAL));
 	                styledText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 //	                styledText.setSelectionForeground(SWTResourceManager.getColor(51, 153, 255));
@@ -804,30 +808,30 @@ public class InterfaceApp {
 	                styledText.setMarginColor(SWTResourceManager.getColor(SWT.COLOR_LIST_SELECTION));
 	                styledText.setLeftMargin(5);
 	                styledText.setDoubleClickEnabled(false);
-	                styledText.setEditable(false);       		
-            		
+	                styledText.setEditable(false);
+
 	                lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
 	                lblInfo.setText("Home");
-	          			          		
+
 	          		String ItemTitle;
-	          		
+
 					if (ActiveItem > 0)
 						ItemTitle = "Home"+" |"+ActiveItem;
 					else
-						ItemTitle = "Home"; 
+						ItemTitle = "Home";
             		tbtmResults.get(ActiveItem).setText(ItemTitle);
             		tbtmResults.get(ActiveItem).setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeHome.png"));
-            		
+
             		scrolledComposite.get(ActiveItem).setExpandVertical(true);
     	            scrolledComposite.get(ActiveItem).setExpandHorizontal(true);
     	            //tbtmResults[ActiveItem].setControl(scrolledComposite[ActiveItem]);
-    	            
+
     	            scrolledComposite.get(ActiveItem).setContent(styledText);
-    	            scrolledComposite.get(ActiveItem).setMinSize(styledText.computeSize(SWT.DEFAULT, SWT.DEFAULT));  
-    	            
+    	            scrolledComposite.get(ActiveItem).setMinSize(styledText.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
     	            //
     	            viewForm.setTopLeft(null);
-    	           
+
             	}
             });
             button.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeHome.png"));
@@ -837,81 +841,81 @@ public class InterfaceApp {
             btnModuleStatistique.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
             btnModuleStatistique.addSelectionListener(new SelectionAdapter() {
             	@Override
-            	public void widgetSelected(SelectionEvent e) {          		
+            	public void widgetSelected(SelectionEvent e) {
             		lblInfo.setText("Statistical Calculs Modul");
-            		
+
             		//hide ... if active
             		viewForm.setTopLeft(null);
-        				            
+
             		String ItemTitle;
-            		int ActiveItem = getActiveTabItem(tabFolder); 
+            		int ActiveItem = getActiveTabItem(tabFolder);
 					if (ActiveItem > 0)
 						ItemTitle = "Statistical Calculs"+" |"+ActiveItem;
 					else
 						ItemTitle = "Statistical Calculs";
-					
+
             		tbtmResults.get(ActiveItem).setText(ItemTitle);
             		tbtmResults.get(ActiveItem).setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
             		//affichage des resultats
             		scrolledComposite.get(ActiveItem).setExpandVertical(true);
             		scrolledComposite.get(ActiveItem).setExpandHorizontal(true);
-            		
-            		
+
+
             		tableRes.set(ActiveItem,  new Table(scrolledComposite.get(ActiveItem), SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI));
             		tableRes.get(ActiveItem).setLinesVisible(true);
             		tableRes.get(ActiveItem).setFont(SWTResourceManager.getFont("Times New Roman", 11, SWT.NORMAL));
             		tableRes.get(ActiveItem).setHeaderVisible(true);
-            		
+
             		TableColumn tblclmnColumns = new TableColumn(tableRes.get(ActiveItem), SWT.LEFT);
             		tblclmnColumns.setResizable(false);
             		tblclmnColumns.setWidth(40);
             		tblclmnColumns.setText("No.");
-	                  
+
             		TableColumn tblclmnMoyenne = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		tblclmnMoyenne.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMean.png"));
             		tblclmnMoyenne.setWidth(100);
             		tblclmnMoyenne.setText("Mean");
-	                  
+
             		TableColumn tblclmnMediane = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		tblclmnMediane.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMedian.png"));
             		tblclmnMediane.setWidth(110);
             		tblclmnMediane.setText("Mediane");
-	                  
+
             		TableColumn tblclmnEcartType = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		tblclmnEcartType.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStandDeviation.png"));
             		tblclmnEcartType.setWidth(135);
             		tblclmnEcartType.setText("Stand Deviation");
-	                  
+
             		TableColumn tblclmnMin = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		tblclmnMin.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMinmax.png"));
             		tblclmnMin.setWidth(98);
             		tblclmnMin.setText("Min");
-            		
+
             		TableColumn tblclmnMax = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		tblclmnMax.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMinmax.png"));
             		tblclmnMax.setWidth(98);
             		tblclmnMax.setText("Max");
-	                  
+
             		TableColumn tblclmnVariance = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		tblclmnVariance.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeVariance.png"));
             		tblclmnVariance.setWidth(115);
             		tblclmnVariance.setText("Variance");
-            		
+
             		TableColumn tblclmnKMoy = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		tblclmnKMoy.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMode.png"));
             		tblclmnKMoy.setWidth(107);
             		tblclmnKMoy.setText("KMoyennes");
-            		
+
             		TableColumn tblclmnClass = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		tblclmnKMoy.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMode.png"));
             		tblclmnKMoy.setWidth(107);
             		tblclmnKMoy.setText("Classfication");
-	                  
+
             		TableColumn tblclmnMode = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		tblclmnMode.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMode.png"));
             		tblclmnMode.setWidth(107);
             		tblclmnMode.setText("Mode");
-	                
+
             		//si on a importé un fichier
             		if(calc.fileImported()) {
             			//we get col. number
@@ -924,83 +928,83 @@ public class InterfaceApp {
         					} catch (Exception e1) {
         						e1.printStackTrace();
         					}
-            			}                		
-                		
+            			}
+
                 		lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
 						lblInfo.setText("Displaying calcul stat for actual data file");
             		}else {
             			lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeWarning.png"));
 						lblInfo.setText("Error : No data found ! you must import a data file first !");
             		}
-            		
-            		
+
+
             		scrolledComposite.get(ActiveItem).setContent(tableRes.get(ActiveItem));
-            		scrolledComposite.get(ActiveItem).setMinSize(tableRes.get(ActiveItem).computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+            		scrolledComposite.get(ActiveItem).setMinSize(tableRes.get(ActiveItem).computeSize(SWT.DEFAULT, SWT.DEFAULT));
             	}
-                              	
+
             });
             btnModuleStatistique.setSelection(true);
             btnModuleStatistique.setText("Statistics");
             btnModuleStatistique.setToolTipText("Show statistical calculations");
             new Label(composite_3, SWT.NONE);
-            
+
             Button btnModuleCorellation = new Button(composite_3, SWT.NONE);
             btnModuleCorellation.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
             btnModuleCorellation.addSelectionListener(new SelectionAdapter() {
             	@Override
-            	public void widgetSelected(SelectionEvent e) {          		
+            	public void widgetSelected(SelectionEvent e) {
             		lblInfo.setText("Corellation Calculs Module");
-            		
+
             		//hide ... if active
             		viewForm.setTopLeft(null);
-        				            
+
             		String ItemTitle;
-            		int ActiveItem = getActiveTabItem(tabFolder); 
+            		int ActiveItem = getActiveTabItem(tabFolder);
 					if (ActiveItem > 0)
 						ItemTitle = "Corellation Matrix"+" |"+ActiveItem;
 					else
 						ItemTitle = "Corellation Matrix";
-					
+
             		tbtmResults.get(ActiveItem).setText(ItemTitle);
             		tbtmResults.get(ActiveItem).setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
             		//affichage des resultats
             		scrolledComposite.get(ActiveItem).setExpandVertical(true);
             		scrolledComposite.get(ActiveItem).setExpandHorizontal(true);
-            		
-            		
+
+
             		tableRes.set(ActiveItem,  new Table(scrolledComposite.get(ActiveItem), SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI));
             		tableRes.get(ActiveItem).setLinesVisible(true);
             		tableRes.get(ActiveItem).setFont(SWTResourceManager.getFont("Times New Roman", 11, SWT.NORMAL));
             		tableRes.get(ActiveItem).setHeaderVisible(true);
-            		
+
             		TableColumn tblclmnColumns = new TableColumn(tableRes.get(ActiveItem), SWT.LEFT);
             		tblclmnColumns.setResizable(false);
             		tblclmnColumns.setWidth(40);
             		tblclmnColumns.setText("");
-	                  
+
             		TableColumn tblclmnMoyenne = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		//tblclmnMoyenne.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMean.png"));
             		tblclmnMoyenne.setWidth(100);
             		tblclmnMoyenne.setText("Var1");
-	                  
+
             		TableColumn tblclmnMediane = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		//tblclmnMediane.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMedian.png"));
             		tblclmnMediane.setWidth(110);
             		tblclmnMediane.setText("Var2");
-	                  
+
             		TableColumn tblclmnEcartType = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		//tblclmnEcartType.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStandDeviation.png"));
             		tblclmnEcartType.setWidth(135);
             		tblclmnEcartType.setText("Var3");
-	                  
+
             		TableColumn tblclmnMin = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
             		//tblclmnMin.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMinmax.png"));
             		tblclmnMin.setWidth(98);
             		tblclmnMin.setText("Var4");
-            		
-            		
-            	
-	                
+
+
+
+
             		//si on a importé un fichier
             		if(calc.fileImported()) {
             			//we get col. number
@@ -1015,164 +1019,164 @@ public class InterfaceApp {
             			org.eclipse.swt.graphics.Color pink= display.getSystemColor(SWT.COLOR_DARK_MAGENTA);
             			org.eclipse.swt.graphics.Color cyan= display.getSystemColor(SWT.COLOR_CYAN);
             			org.eclipse.swt.graphics.Color darkcyan= display.getSystemColor(SWT.COLOR_DARK_CYAN);
-            			
+
             			for(int i = 0; i < colNb; i++) {
             				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
             				try {
         						//tableItem[i].setText(new String[] {"Var"+(i+1),calc.getCoefCorl(i,0), calc.getCoefCorl(i,1),calc.getCoefCorl(i,2),calc.getCoefCorl(i,3)});
             					tableItem[i].setText(new String[] {"Var"+(i+1),calc.getCoefCorl(i,0), calc.getCoefCorl(i,1),calc.getCoefCorl(i,2),calc.getCoefCorl(i,3)});
-            					
+
             						//double valcour = Integer.parseInt(tableItem[i].getText());
             					if (Double.parseDouble(calc.getCoefCorl(i,0))==1.0){
             						tableItem[i].setBackground(1, darkgreen);
             						}
-            						
+
             						if (Double.parseDouble(calc.getCoefCorl(i,0))==0.0){
                 						tableItem[i].setBackground(1,gray);
                 					}
-            						
+
             						if (Double.parseDouble(calc.getCoefCorl(i,0))==-1.0){
                 						tableItem[i].setBackground(1,blue);
                 					}
-            						
+
             						if (Double.parseDouble(calc.getCoefCorl(i,0))>0.0 && Double.parseDouble(calc.getCoefCorl(i,0))<=0.5) {
                 						tableItem[i].setBackground(1,yellow);
-                	
+
                 					}
-            						
+
             						if (Double.parseDouble(calc.getCoefCorl(i,0))>0.5 && Double.parseDouble(calc.getCoefCorl(i,0))<1) {
                 						tableItem[i].setBackground(1,green);
                 					}
-            						
+
             						if (Double.parseDouble(calc.getCoefCorl(i,0))>-1 && Double.parseDouble(calc.getCoefCorl(i,0))<-0.5) {
                 						tableItem[i].setBackground(1,darkcyan);
-                	
+
                 					}
-            						
+
             						if (Double.parseDouble(calc.getCoefCorl(i,0))>-0.5 && Double.parseDouble(calc.getCoefCorl(i,0))<0.0) {
                 						tableItem[i].setBackground(1,cyan);
                 					}
-            						
-            						
-            						
+
+
+
             						if (Double.parseDouble(calc.getCoefCorl(i,1))==1.0){
                 						tableItem[i].setBackground(2, darkgreen);
                 						}
-                						
+
                 						if (Double.parseDouble(calc.getCoefCorl(i,1))==0.0){
                     						tableItem[i].setBackground(2,gray);
                     					}
-                						
+
                 						if (Double.parseDouble(calc.getCoefCorl(i,1))==-1.0){
                     						tableItem[i].setBackground(2,blue);
                     					}
-                						
+
                 						if (Double.parseDouble(calc.getCoefCorl(i,1))>0.0 && Double.parseDouble(calc.getCoefCorl(i,1))<=0.5) {
                     						tableItem[i].setBackground(2,yellow);
-                    	
+
                     					}
-                						
+
                 						if (Double.parseDouble(calc.getCoefCorl(i,1))>0.5 && Double.parseDouble(calc.getCoefCorl(i,1))<1) {
                     						tableItem[i].setBackground(2,green);
                     					}
-                						
+
                 						if (Double.parseDouble(calc.getCoefCorl(i,1))>-1 && Double.parseDouble(calc.getCoefCorl(i,1))<-0.5) {
                     						tableItem[i].setBackground(2,darkcyan);
-                    	
+
                     					}
-                						
+
                 						if (Double.parseDouble(calc.getCoefCorl(i,1))>-0.5 && Double.parseDouble(calc.getCoefCorl(i,1))<0.0) {
                     						tableItem[i].setBackground(2,cyan);
                     					}
 
 
-                						
+
 
                 						if (Double.parseDouble(calc.getCoefCorl(i,2))==1.0){
                     						tableItem[i].setBackground(3, darkgreen);
                     						}
-                    						
+
                     						if (Double.parseDouble(calc.getCoefCorl(i,2))==0.0){
                         						tableItem[i].setBackground(3,gray);
                         					}
-                    						
+
                     						if (Double.parseDouble(calc.getCoefCorl(i,2))==-1.0){
                         						tableItem[i].setBackground(3,blue);
                         					}
-                    						
+
                     						if (Double.parseDouble(calc.getCoefCorl(i,2))>0.0 && Double.parseDouble(calc.getCoefCorl(i,2))<=0.5) {
                         						tableItem[i].setBackground(3,yellow);
-                        	
+
                         					}
-                    						
+
                     						if (Double.parseDouble(calc.getCoefCorl(i,2))>0.5 && Double.parseDouble(calc.getCoefCorl(i,2))<1) {
                         						tableItem[i].setBackground(3,green);
                         					}
-                    						
+
                     						if (Double.parseDouble(calc.getCoefCorl(i,2))>-1 && Double.parseDouble(calc.getCoefCorl(i,2))<-0.5) {
                         						tableItem[i].setBackground(3,darkcyan);
-                        	
+
                         					}
-                    						
+
                     						if (Double.parseDouble(calc.getCoefCorl(i,2))>-0.5 && Double.parseDouble(calc.getCoefCorl(i,2))<0.0) {
                         						tableItem[i].setBackground(3,cyan);
                         					}
-            						
-                    						
+
+
 
                     						if (Double.parseDouble(calc.getCoefCorl(i,3))==1.0){
                         						tableItem[i].setBackground(4, darkgreen);
                         						}
-                        						
+
                         						if (Double.parseDouble(calc.getCoefCorl(i,3))==0.0){
                             						tableItem[i].setBackground(4,gray);
                             					}
-                        						
+
                         						if (Double.parseDouble(calc.getCoefCorl(i,3))==-1.0){
                             						tableItem[i].setBackground(4,blue);
                             					}
-                        						
+
                         						if (Double.parseDouble(calc.getCoefCorl(i,3))>0.0 && Double.parseDouble(calc.getCoefCorl(i,3))<=0.5) {
                             						tableItem[i].setBackground(4,yellow);
-                            	
+
                             					}
-                        						
+
                         						if (Double.parseDouble(calc.getCoefCorl(i,3))>0.5 && Double.parseDouble(calc.getCoefCorl(i,3))<1) {
                             						tableItem[i].setBackground(4,green);
                             					}
-                        						
+
                         						if (Double.parseDouble(calc.getCoefCorl(i,3))>-1 && Double.parseDouble(calc.getCoefCorl(i,3))<-0.5) {
                             						tableItem[i].setBackground(4,darkcyan);
-                            	
+
                             					}
-                        						
+
                         						if (Double.parseDouble(calc.getCoefCorl(i,3))>-0.5 && Double.parseDouble(calc.getCoefCorl(i,3))<0.0) {
                             						tableItem[i].setBackground(4,cyan);
                             					}
-            							
-            					
+
+
         					} catch (Exception e1) {
         						e1.printStackTrace();
         					}
-            			}                		
-                		
+            			}
+
                 		lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
 						lblInfo.setText("Displaying calcul stat for actual data file");
             		}else {
             			lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeWarning.png"));
 						lblInfo.setText("Error : No data found ! you must import a data file first !");
             		}
-            		
-            		
+
+
             		scrolledComposite.get(ActiveItem).setContent(tableRes.get(ActiveItem));
-            		scrolledComposite.get(ActiveItem).setMinSize(tableRes.get(ActiveItem).computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+            		scrolledComposite.get(ActiveItem).setMinSize(tableRes.get(ActiveItem).computeSize(SWT.DEFAULT, SWT.DEFAULT));
             	}
-                              	
+
             });
             btnModuleCorellation.setSelection(true);
             btnModuleCorellation.setText("Corellation");
             btnModuleCorellation.setToolTipText("Show corellation calculations");
-            
+
             new Label(composite_3, SWT.NONE);
             Button btnRegression = new Button(composite_3, SWT.NONE);
             btnRegression.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
@@ -1180,30 +1184,30 @@ public class InterfaceApp {
             	@Override
             	public void widgetSelected(SelectionEvent e) {
 	lblInfo.setText("Linear Regression Module");
-            		
+
             		//hide ... if active
             		viewForm.setTopLeft(null);
-        				            
+
             		String ItemTitle;
-            		int ActiveItem = getActiveTabItem(tabFolder); 
+            		int ActiveItem = getActiveTabItem(tabFolder);
 					if (ActiveItem > 0)
 						ItemTitle = "Simple Linear Regression"+" |"+ActiveItem;
 					else
 						ItemTitle = "Simple Linear Regression";
-					
+
             		tbtmResults.get(ActiveItem).setText(ItemTitle);
             		tbtmResults.get(ActiveItem).setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
             		//affichage des resultats
             		scrolledComposite.get(ActiveItem).setExpandVertical(true);
             		scrolledComposite.get(ActiveItem).setExpandHorizontal(true);
-            		
+
             		 final Composite composite_barreChoixSP = new Composite(viewForm, SWT.NONE);
      	            composite_barreChoixSP.setLayout(new FillLayout(SWT.HORIZONTAL));
-     	           
+
      	            Group grpChoixDesColonnes_1 = new Group(composite_barreChoixSP, SWT.NONE);
      	            grpChoixDesColonnes_1.setText("Choix Des Colonnes et du Couleur");
      	            grpChoixDesColonnes_1.setLayout(new GridLayout(1, false));
-     	            
+
      	            Composite composite_1 = new Composite(grpChoixDesColonnes_1, SWT.NONE);
      	            GridData gd_composite_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
      	            gd_composite_1.widthHint = 736;
@@ -1211,35 +1215,35 @@ public class InterfaceApp {
      	            GridLayout gl_composite_1 = new GridLayout(13, false);
      	            gl_composite_1.horizontalSpacing = 15;
      	            composite_1.setLayout(gl_composite_1);
-     	            
+
      	            Label lblCoordonnees = new Label(composite_1, SWT.NONE);
      	            lblCoordonnees.setBounds(0, 0, 49, 13);
      	            lblCoordonnees.setText("Coordonnees :");
-     	            
+
      	            Label lblX = new Label(composite_1, SWT.CENTER);
      	            lblX.setFont(SWTResourceManager.getFont("Tahoma", 8, SWT.BOLD));
      	            lblX.setBounds(0, 0, 49, 13);
      	            lblX.setText("X :");
-     	            
+
      	            final Spinner spinner_2 = new Spinner(composite_1, SWT.BORDER | SWT.READ_ONLY);
-     	            
+
      	            Label label_2 = new Label(composite_1, SWT.NONE);
      	            label_2.setText("Y :");
      	            label_2.setFont(SWTResourceManager.getFont("Tahoma", 8, SWT.BOLD));
      	            final Spinner spinner_3 = new Spinner(composite_1, SWT.BORDER | SWT.READ_ONLY);
-     	            
+
      	            spinner_2.setBounds(0, 0, 46, 21);
      	            spinner_2.setMaximum(0);
      	            spinner_2.setMinimum(0);
-     	            
-     	            
+
+
      	            spinner_3.setBounds(0, 0, 46, 21);
      	            spinner_3.setMaximum(0);
      	            spinner_3.setMinimum(0);
      	            new Label(composite_1, SWT.NONE);
-     	            
+
      	            final ScatterPlot_1[] scatter = new ScatterPlot_1[100];
-     	            
+
      	            Button btnValidateSP = new Button(composite_1, SWT.NONE);
      	            GridData gd_btnValidateSP = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
      	            gd_btnValidateSP.heightHint = 23;
@@ -1248,31 +1252,31 @@ public class InterfaceApp {
      	            btnValidateSP.addSelectionListener(new SelectionAdapter() {
      			     	@Override
      			     	public void widgetSelected(SelectionEvent e) {
-     			     		
+
      			     		if(calc.fileImported()) {
      				     		int ActiveItem = getActiveTabItem(tabFolder);
      				     		scatter[ActiveItem] = new ScatterPlot_1();
-     	
+
      				     		scatter[ActiveItem].setInputObject(dfp.getDataByObject());
      			                int in = 0;
      			                for(InputObject inob : dfp.getDataByObject()) {
      			                	double[] val1 = new double[inob.getValuesList(spinner_2.getSelection()-1).size()];
      			                	for(int i = 0; i < inob.getValuesList(spinner_2.getSelection()-1).size(); i++)
      			                		val1[i] = inob.getValuesList(spinner_2.getSelection()-1).get(i);
-     			                	
+
      			                	double[] val2 = new double[inob.getValuesList(spinner_3.getSelection()-1).size()];
      			                	for(int i = 0; i < inob.getValuesList(spinner_3.getSelection()-1).size(); i++)
      			                		val2[i] = inob.getValuesList(spinner_3.getSelection()-1).get(i);
-     			                	
+
      			                	scatter[ActiveItem].addValues(scatter[ActiveItem].series[in], val1, val2);
      			                	in++;
      			                }
-     			                
-     			                
+
+
      			                sp_chart[ActiveItem] = scatter[ActiveItem].createChart(dfp.getNbObjectFound(),spinner_2.getSelection(),spinner_3.getSelection());
-     			                
+
      			                ChartComposite frame = new ChartComposite(scrolledComposite.get(ActiveItem),SWT.NONE,sp_chart[ActiveItem],true);
-     			                
+
      			                scrolledComposite.get(ActiveItem).setContent(frame);
      			                scrolledComposite.get(ActiveItem).setMinSize(frame.computeSize(SWT.DEFAULT, SWT.DEFAULT));
      			     		}else {
@@ -1281,20 +1285,20 @@ public class InterfaceApp {
      	            		}
      			     	}
      	            });
-     	            
+
      	            btnValidateSP.setText("Validate ");
      	            btnValidateSP.setToolTipText("Validate your choice");
      	            new Label(composite_1, SWT.NONE);
      	            new Label(composite_1, SWT.NONE);
      	            new Label(composite_1, SWT.NONE);
-     	            
+
      	            final Combo combo_1 = new Combo(composite_1, SWT.NONE);
      	            GridData gd_combo_1 = new GridData(SWT.RIGHT, SWT.CENTER, true, false, 1, 1);
      	            gd_combo_1.widthHint = 113;
      	            combo_1.setLayoutData(gd_combo_1);
      	            combo_1.setText("text");
      	            new Label(composite_1, SWT.NONE);
-     	            
+
      	            Button btnChooseColor = new Button(composite_1, SWT.NONE);
      	            btnChooseColor.addSelectionListener(new SelectionAdapter() {
      			     	@Override
@@ -1308,14 +1312,14 @@ public class InterfaceApp {
      			     	      if(index >=0)
      			     	    	  scatter[ActiveItem].changeColor(index, color);
      			     	   }
-     			     	
-     			     	}	
-     			     	    
+
+     			     	}
+
      	                });
      	            btnChooseColor.setText("Choose Color");
-     				
-     				
-     				
+
+
+
      				  //ceci permet de detecter l'onglet courant et ...
      		     tabFolder.addSelectionListener(new SelectionAdapter() {
      	            	@Override
@@ -1333,67 +1337,67 @@ public class InterfaceApp {
      	            			viewForm.setTopLeft(composite_barreChoixSP);
      	            		else
      	            			viewForm.setTopLeft(null);
-     	            		
+
      	            	}
      	            });
-     		     
-            		
-      	            
-            	}	
+
+
+
+            	}
             	});
             btnRegression.setSelection(true);
             btnRegression.setText("Regression");
             btnRegression.setToolTipText("Show regression line");
-            
-            
+
+
             //Ajout du bouton KMoyennes
             new Label(composite_3, SWT.NONE);
-            
+
             Button btnModuleKMoy = new Button(composite_3, SWT.NONE);
             btnModuleKMoy.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
             btnModuleKMoy.addSelectionListener(new SelectionAdapter() {
             	@Override
-            	public void widgetSelected(SelectionEvent e) {          		
+            	public void widgetSelected(SelectionEvent e) {
             		lblInfo.setText("K-Means Classification");
-            		
+
             		//hide ... if active
             		viewForm.setTopLeft(null);
-        				            
+
             		String ItemTitle;
-            		int ActiveItem = getActiveTabItem(tabFolder); 
+            		int ActiveItem = getActiveTabItem(tabFolder);
 					if (ActiveItem > 0)
 						ItemTitle = "K-Means Classification"+" |"+ActiveItem;
 					else
 						ItemTitle = "K-Means Classification";
-					
+
             		tbtmResults.get(ActiveItem).setText(ItemTitle);
             		tbtmResults.get(ActiveItem).setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
             		//affichage des resultats
             		scrolledComposite.get(ActiveItem).setExpandVertical(true);
             		scrolledComposite.get(ActiveItem).setExpandHorizontal(true);
-            		
-            		
+
+
             		tableRes.set(ActiveItem,  new Table(scrolledComposite.get(ActiveItem), SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI));
             		tableRes.get(ActiveItem).setLinesVisible(true);
             		tableRes.get(ActiveItem).setFont(SWTResourceManager.getFont("Times New Roman", 11, SWT.NORMAL));
             		tableRes.get(ActiveItem).setHeaderVisible(true);
-            		
+
             		TableColumn tblclmnColumns = new TableColumn(tableRes.get(ActiveItem), SWT.LEFT);
             		tblclmnColumns.setResizable(false);
             		tblclmnColumns.setWidth(40);
             		tblclmnColumns.setText("");
-	                  
-            		
+
+
             		//ArrayList<ArrayList<Double>> repartition = new ArrayList<ArrayList<Double>>();
-            		
-            			                
+
+
             		//si on a importe un fichier
             		if(calc.fileImported() && dfp.getNbMissingData()  == 0) {
             			//we get col. number
-            			
+
             			int colNb = dfp.getNbDataColumns();
-            			
-            		
+
+
             			org.eclipse.swt.graphics.Color red = display.getSystemColor(SWT.COLOR_RED);
             			org.eclipse.swt.graphics.Color green = display.getSystemColor(SWT.COLOR_GREEN);
             			org.eclipse.swt.graphics.Color gray = display.getSystemColor(SWT.COLOR_GRAY);
@@ -1403,43 +1407,43 @@ public class InterfaceApp {
             			org.eclipse.swt.graphics.Color pink= display.getSystemColor(SWT.COLOR_DARK_MAGENTA);
             			org.eclipse.swt.graphics.Color cyan= display.getSystemColor(SWT.COLOR_CYAN);
             			org.eclipse.swt.graphics.Color darkcyan= display.getSystemColor(SWT.COLOR_DARK_CYAN);
-            			
-            		
-            			
+
+
+
             			InputObject io = DoCalculs.getIO();
             			ArrayList<Double[]> valeurs =new ArrayList<Double[]>();
-            			
+
             			for (int j=0; j < io.getSize(); j++){
             				ValuesList lineElement = io.getValuesList(j);
             				Double [] element = new Double [colNb];
-            				
+
             				for(int i=0 ; i < colNb; i++){
 	            				element[i] = lineElement.get(i);
 	            			}
-            				
+
             				valeurs.add(element);
             			}
-            			
+
             			Repartition kmeans = new Repartition();
             			kmeans = ClusteringTools.K_MeanForK(valeurs, 3);
-            			
-            			
-            			
+
+
+
             			/*for (int j=0; j < kmeans.size(); j++){
-            				
+
 	            			for(int i=0 ; i < moi.get(j).size(); i++){
 	            				resultats.add(moi.get(j).get(i));
 	            			}
             			}*/
-            			
-            			
+
+
             			for(int i = 0; i < kmeans.getNbClusters(); i++) {
 	            			TableColumn tblclmn = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
 	                		//tblclmnMoyenne.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMean.png"));
 	                		tblclmn.setWidth(100);
 	                		tblclmn.setText("Classe"+(i+1));
             			}
-            				
+
             			//GetNbLines
             			int nbLinesMax = 0;
             			for (ArrayList<Double[]> cluster : kmeans.getAllClusters()) {
@@ -1447,56 +1451,56 @@ public class InterfaceApp {
 							if(nbElementsInCluster > nbLinesMax)
 								nbLinesMax = nbElementsInCluster;
 						}
-            			
-            			
+
+
             			TableItem[] tableItem = new TableItem[valeurs.size()];
-            			
-            			
-            			
+
+
+
             			for(int i = 0; i< nbLinesMax; i++) {
             				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
             				String [] valColonnes = new String[kmeans.getNbClusters()+1];
             				valColonnes[0] = ""+(i+1);
-            				
+
             				for (int j = 0; j< kmeans.getNbClusters(); j++) {
             					ArrayList<Double[]> cluster = kmeans.getCluster(j);
             					String valuePrinted = "";
-            					
+
             					if(i < cluster.size() ) {//if i is not out of bound. => For dynamic printing line values for classes with more value than others.
 									Double [] element = cluster.get(i);
-																		
+
 									// Add all the Double[] values into a String.
 									for (Double valAttribute :  element) {
 										valuePrinted += " - " + valAttribute;
 									}
-									
+
 									valuePrinted = valuePrinted.substring(3);
 								}
 
 								valColonnes[j+1] = valuePrinted;
-            					
+
 							}
-            				
+
             				tableItem[i].setText(valColonnes); //A modifier pour faire la methode calc.Kmoy
-        					
+
             			}
-            			
+
             			/*
             			for(int i = 0; i < kmeans.size(); i++) {
             				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
             				try {
             					for (int j=0; j < nbLinesMax; j++){
-            						
-            						
-            						
-            						
+
+
+
+
         						tableItem[i].setText(new String[] {""+(i+1),kmeans.get(i).get(j).toString(),kmeans.get(i).get(j+1).toString(),kmeans.get(i).get(j+2).toString()}); //A modifier pour faire la methode calc.Kmoy
-            					
+
             					}
             					} catch (Exception e1) {
         						e1.printStackTrace();
         					}
-            			}                		
+            			}
                 		*/
                 		lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
 						lblInfo.setText("Displaying calcul stat for actual data file");
@@ -1507,66 +1511,66 @@ public class InterfaceApp {
 						else
 							lblInfo.setText("Error : A data is missing so you can't start this module!");
             		}
-            		
-            		
+
+
             		scrolledComposite.get(ActiveItem).setContent(tableRes.get(ActiveItem));
-            		scrolledComposite.get(ActiveItem).setMinSize(tableRes.get(ActiveItem).computeSize(SWT.DEFAULT, SWT.DEFAULT));	
+            		scrolledComposite.get(ActiveItem).setMinSize(tableRes.get(ActiveItem).computeSize(SWT.DEFAULT, SWT.DEFAULT));
             	}
-                              	
+
             });
             btnModuleKMoy.setSelection(true);
             btnModuleKMoy.setText("K-Means");
             btnModuleKMoy.setToolTipText("Show K-Means Classification");
-            
+
             //Ajout du bouton CAH
-            
+
             new Label(composite_3, SWT.NONE);
-            
+
             Button btnModuleCah = new Button(composite_3, SWT.NONE);
             btnModuleCah.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
             btnModuleCah.addSelectionListener(new SelectionAdapter() {
             	@Override
-            	public void widgetSelected(SelectionEvent e) {          		
+            	public void widgetSelected(SelectionEvent e) {
             		lblInfo.setText("CAH Classification");
-            		
+
             		//hide ... if active
             		viewForm.setTopLeft(null);
-        				            
+
             		String ItemTitle;
-            		int ActiveItem = getActiveTabItem(tabFolder); 
+            		int ActiveItem = getActiveTabItem(tabFolder);
 					if (ActiveItem > 0)
 						ItemTitle = "CAH Classification"+" |"+ActiveItem;
 					else
 						ItemTitle = "CAH Classification";
-					
+
             		tbtmResults.get(ActiveItem).setText(ItemTitle);
             		tbtmResults.get(ActiveItem).setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeStat.png"));
             		//affichage des resultats
             		scrolledComposite.get(ActiveItem).setExpandVertical(true);
             		scrolledComposite.get(ActiveItem).setExpandHorizontal(true);
-            		
-            		
+
+
             		tableRes.set(ActiveItem,  new Table(scrolledComposite.get(ActiveItem), SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI));
             		tableRes.get(ActiveItem).setLinesVisible(true);
             		tableRes.get(ActiveItem).setFont(SWTResourceManager.getFont("Times New Roman", 11, SWT.NORMAL));
             		tableRes.get(ActiveItem).setHeaderVisible(true);
-            		
+
             		TableColumn tblclmnColumns = new TableColumn(tableRes.get(ActiveItem), SWT.LEFT);
             		tblclmnColumns.setResizable(false);
             		tblclmnColumns.setWidth(40);
             		tblclmnColumns.setText("");
-	                  
-            		
+
+
             		//ArrayList<ArrayList<Double>> repartition = new ArrayList<ArrayList<Double>>();
-            		
-            			                
+
+
             		//si on a importe un fichier
             		if(calc.fileImported() && dfp.getNbMissingData()  == 0) {
             			//we get col. number
-            			
+
             			int colNb = dfp.getNbDataColumns();
-            			
-            		
+
+
             			org.eclipse.swt.graphics.Color red = display.getSystemColor(SWT.COLOR_RED);
             			org.eclipse.swt.graphics.Color green = display.getSystemColor(SWT.COLOR_GREEN);
             			org.eclipse.swt.graphics.Color gray = display.getSystemColor(SWT.COLOR_GRAY);
@@ -1576,43 +1580,43 @@ public class InterfaceApp {
             			org.eclipse.swt.graphics.Color pink= display.getSystemColor(SWT.COLOR_DARK_MAGENTA);
             			org.eclipse.swt.graphics.Color cyan= display.getSystemColor(SWT.COLOR_CYAN);
             			org.eclipse.swt.graphics.Color darkcyan= display.getSystemColor(SWT.COLOR_DARK_CYAN);
-            			
-            		
-            			
+
+
+
             			InputObject io = DoCalculs.getIO();
             			ArrayList<Double[]> valeurs =new ArrayList<Double[]>();
-            			
+
             			for (int j=0; j < io.getSize(); j++){
             				ValuesList lineElement = io.getValuesList(j);
             				Double [] element = new Double [colNb];
-            				
+
             				for(int i=0 ; i < colNb; i++){
 	            				element[i] = lineElement.get(i);
 	            			}
-            				
+
             				valeurs.add(element);
             			}
-            			
+
             			Repartition cahRepartition = new Repartition();
             			cahRepartition = ClusteringTools.HierarchicalClustering(valeurs);
-            			
-            			
-            			
+
+
+
             			/*for (int j=0; j < kmeans.size(); j++){
-            				
+
 	            			for(int i=0 ; i < moi.get(j).size(); i++){
 	            				resultats.add(moi.get(j).get(i));
 	            			}
             			}*/
-            			
-            			
+
+
             			for(int i = 0; i < cahRepartition.getNbClusters(); i++) {
 	            			TableColumn tblclmn = new TableColumn(tableRes.get(ActiveItem), SWT.CENTER);
 	                		//tblclmnMoyenne.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeMean.png"));
 	                		tblclmn.setWidth(100);
 	                		tblclmn.setText("Classe"+(i+1));
             			}
-            				
+
             			//GetNbLines
             			int nbLinesMax = 0;
             			for (ArrayList<Double[]> cluster : cahRepartition.getAllClusters()) {
@@ -1620,57 +1624,120 @@ public class InterfaceApp {
 							if(nbElementsInCluster > nbLinesMax)
 								nbLinesMax = nbElementsInCluster;
 						}
-            			
-            			
+
+
             			TableItem[] tableItem = new TableItem[valeurs.size()];
-            			
-            			
-            			
+
+
+
             			for(int i = 0; i< nbLinesMax; i++) {
             				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
             				String [] valColonnes = new String[cahRepartition.getNbClusters()+1];
             				valColonnes[0] = ""+(i+1);
-            				
+
             				for (int j = 0; j< cahRepartition.getNbClusters(); j++) {
             					ArrayList<Double[]> cluster = cahRepartition.getCluster(j);
             					String valuePrinted = "";
-            					
+
             					if(i < cluster.size() ) {//if i is not out of bound. => For dynamic printing line values for classes with more value than others.
 									Double [] element = cluster.get(i);
-																		
+
 									// Add all the Double[] values into a String.
 									for (Double valAttribute :  element) {
 										valuePrinted += " - " + valAttribute;
 									}
-									
+
 									valuePrinted = valuePrinted.substring(3);
 								}
 
 								valColonnes[j+1] = valuePrinted;
-            					
+
 							}
-            				
+
             				tableItem[i].setText(valColonnes); //A modifier pour faire la methode calc.Kmoy
-        					
+
             			}
-            			
+
             			/*
             			for(int i = 0; i < kmeans.size(); i++) {
             				tableItem[i] = new TableItem(tableRes.get(ActiveItem), SWT.NONE);
             				try {
             					for (int j=0; j < nbLinesMax; j++){
-            						
-            						
-            						
-            						
+
+
+
+
         						tableItem[i].setText(new String[] {""+(i+1),kmeans.get(i).get(j).toString(),kmeans.get(i).get(j+1).toString(),kmeans.get(i).get(j+2).toString()}); //A modifier pour faire la methode calc.Kmoy
-            					
+
             					}
             					} catch (Exception e1) {
         						e1.printStackTrace();
         					}
-            			}                		
+            			}
                 		*/
+
+
+
+            			// Affichage graphique cluster par nuage de points
+            			Repartition rep = new Repartition();
+
+			     		InputObject [] clusters = new InputObject[rep.getNbClusters()];
+
+			     		for (int i = 0; i< rep.getNbClusters(); i++) {
+			     			ArrayList<Double[]> cluster = rep.getCluster(i);
+
+			     			InputObject currentCluster = new InputObject("Cluster "+i);
+			     			ArrayList<ValuesList> clustersList = new ArrayList<ValuesList>();
+
+			     			for (Double[] element : cluster) {
+								ValuesList valueList = new ValuesList();
+								for (Double valeur : element) {
+									valueList.add(valeur);
+								}
+								clustersList.add(valueList);
+							}
+
+			     			currentCluster.setListData(clustersList);
+			     			clusters[i] = currentCluster;
+
+						}
+
+
+			     		ActiveItem = getActiveTabItem(tabFolder) +1;
+			     		scatter[ActiveItem] = new ScatterPlot_1();
+
+
+
+			     		scatter[ActiveItem].setInputObject(clusters);
+		                int in = 0;
+		                for(InputObject inob : clusters) {
+		                	double[] val1 = new double[inob.getValuesList(spinner_2.getSelection()-1).size()];
+		                	for(int i = 0; i < inob.getValuesList(spinner_2.getSelection()-1).size(); i++)
+		                		val1[i] = inob.getValuesList(spinner_2.getSelection()-1).get(i);
+
+		                	double[] val2 = new double[inob.getValuesList(spinner_3.getSelection()-1).size()];
+		                	for(int i = 0; i < inob.getValuesList(spinner_3.getSelection()-1).size(); i++)
+		                		val2[i] = inob.getValuesList(spinner_3.getSelection()-1).get(i);
+
+		                	scatter[ActiveItem].addValues(scatter[ActiveItem].series[in], val1, val2);
+		                	in++;
+		                }
+
+
+		                sp_chart[ActiveItem] = scatter[ActiveItem].createChart(dfp.getNbObjectFound(),spinner_2.getSelection(),spinner_3.getSelection());
+
+		                ChartComposite frame = new ChartComposite(scrolledComposite.get(ActiveItem),SWT.NONE,sp_chart[ActiveItem],true);
+
+		                scrolledComposite.get(ActiveItem).setContent(frame);
+		                scrolledComposite.get(ActiveItem).setMinSize(frame.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+
+
+
+
+
+
+
                 		lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
 						lblInfo.setText("Displaying calcul stat for actual data file");
             		}else {
@@ -1680,20 +1747,20 @@ public class InterfaceApp {
 						else
 							lblInfo.setText("Error : A data is missing so you can't start this module!");
             		}
-            		
-            		
+
+
             		scrolledComposite.get(ActiveItem).setContent(tableRes.get(ActiveItem));
-            		scrolledComposite.get(ActiveItem).setMinSize(tableRes.get(ActiveItem).computeSize(SWT.DEFAULT, SWT.DEFAULT));	
-            	}	
-            	
-                              	
+            		scrolledComposite.get(ActiveItem).setMinSize(tableRes.get(ActiveItem).computeSize(SWT.DEFAULT, SWT.DEFAULT));
+            	}
+
+
             });
             btnModuleCah.setSelection(true);
             btnModuleCah.setText("CAH");
             btnModuleCah.setToolTipText("Show CAH Classification");
-            
+
             final ToolBar toolBar = new ToolBar(composite_3, SWT.RIGHT);
-            
+
             final ToolItem tltmDropdownItem = new ToolItem(toolBar, SWT.DROP_DOWN);
             tltmDropdownItem.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeGraphics.png"));
             tltmDropdownItem.addSelectionListener(new SelectionAdapter() {
@@ -1711,38 +1778,38 @@ public class InterfaceApp {
             tltmDropdownItem.setText("Visual Graphic");
             tltmDropdownItem.setToolTipText("VisualGraphic Modul");
             new Label(composite_3, SWT.NONE);
-                  
-            
+
+
             final Label label = new Label(composite_3, SWT.SEPARATOR | SWT.VERTICAL);
             GridData gd_label = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
             gd_label.heightHint = 18;
             label.setLayoutData(gd_label);
             new Label(composite_3, SWT.NONE);
-            
+
             Button btnImportFile = new Button(composite_3, SWT.FLAT);
             btnImportFile.addSelectionListener(new SelectionAdapter() {
             	@Override
             	public void widgetSelected(SelectionEvent e) {
-            		
+
             		String nomFichier;
     	      		FileDialog dialog = new FileDialog(shell, SWT.OPEN);
     	      		dialog.setFilterExtensions(new String[] {"*.*" });
     	      		nomFichier = dialog.open();
-    	      			
+
     	      		if(nomFichier != null) {
-    	      			    	      			
+
     	      			Display.getDefault().asyncExec(new Runnable() {
     	      				public void run() {
-    	      				
+
     							try {
     								pb.open();
     							} catch (InterruptedException e) {
     								e.printStackTrace();
     							}
-    							
+
         	      			}
     	      			});
-    	      			
+
         	      		//set file
     	      			try {
 							dfp.setFilePropreties(nomFichier);
@@ -1750,21 +1817,21 @@ public class InterfaceApp {
 							lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeWarning.png"));
     						lblInfo.setText("Error : Failed to set file propreties !");
 						}
-    	      			
+
         	      		dfp.setDataFile();//setFileName(nomFichier);
         	      		calc.setInputData(dfp.getData());
         			     int Nblines = 1;
         			     Nblines = dfp.getNbLines();
         			     spinner.setMinimum(1);
         			     spinner.setMaximum(Nblines);
-        			     
+
         			     spinner_1.setMinimum(1);
         			     spinner_1.setMaximum(Nblines);
-        			     
-        			     
+
+
         			     int NbCol = 0;
         			     NbCol = dfp.getNbDataColumns();
-        			     
+
         			     if(NbCol > 0) {
     				    	 String[] items = new String[NbCol];
     				    	 for(int i=0; i < NbCol; i++) {
@@ -1788,14 +1855,14 @@ public class InterfaceApp {
     						lblInfo.setText("Error : Failed to read data file !");
     						pb.setEnd();
     						calc.clearImportedFile();
-      					}      			    
+      					}
     	      		}
-    	      		
+
             	}
             });
             btnImportFile.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeImport.png"));
             btnImportFile.setToolTipText("Import data file");
-            
+
             //SAUVEGARDE
             Button btnNewButton_3 = new Button(composite_3, SWT.FLAT);
             btnNewButton_3.addSelectionListener(new SelectionAdapter() {
@@ -1803,35 +1870,35 @@ public class InterfaceApp {
             	public void widgetSelected(SelectionEvent e) {
             		String nomFichier;
     	      		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
-    	      		
+
     	      		if(calc.fileImported()) {
 	    	      		//to get the tan name
 	    	      		int ActiveItem = getActiveTabItem(tabFolder);
 	    	      		StringTokenizer st = new StringTokenizer(tbtmResults.get(ActiveItem).getText(),"|");
 	    	      		String title = st.nextToken();
-	    	      		
+
 	    	      		dialog.setFileName("Export_"+title);
 	    	      		if(title.equals("Statistical Calculs") || title.startsWith("Histogram") || title.startsWith("Scatter Plot") || title.startsWith("Corellation Matrix")) {
-	    	      		
+
 		    	      		dialog.setFilterExtensions(new String[] { "*.*" });
 		    	      		nomFichier = dialog.open();
-		    	      		
-		    	      		
-		    	      		
+
+
+
 		    	      		//exportation
 		    	      		if(nomFichier != null) {
 		    	      			File f = new File(nomFichier);
 			    	      		if(f.exists()) {
 			    	      			f.delete();
 			    	      		}
-		    	      			
+
 		    	      			CorpPdf corp = new CorpPdf("STATICAL CALCULS SUMMARY", dfp.getNbLines(), dfp.getNbDataColumns(), dfp.getNbObjectFound(), dfp.getObjectNames(), dfp.getNbMissingData());
 		    		    		Document document = new Document();
-		    		    		
+
 		    		    		//test si bon extension
 		    		    		if(nomFichier.endsWith(".pdf")) {
 		    		    			try {
-		        		    			PdfWriter.getInstance(document, 
+		        		    			PdfWriter.getInstance(document,
 		        		    				new FileOutputStream(nomFichier));
 		        		    		} catch (FileNotFoundException e1) {
 		        		    			e1.printStackTrace();
@@ -1841,7 +1908,7 @@ public class InterfaceApp {
 		    		    		}else {
 		    		    			nomFichier = nomFichier.concat(".pdf");
 		    		    			try {
-		        		    			PdfWriter.getInstance(document, 
+		        		    			PdfWriter.getInstance(document,
 		        		    				new FileOutputStream(nomFichier));
 		        		    		} catch (FileNotFoundException e1) {
 		        		    			e1.printStackTrace();
@@ -1849,7 +1916,7 @@ public class InterfaceApp {
 		        		    			e1.printStackTrace();
 		        		    		}
 		    		    		}
-		    		    		
+
 		    		    		//get all result
 		    		    		//double[][] tabcoefCorel = calc.getCoefCorls(dfp.getNbDataColumns());
 		    		    		double[] tabMean = calc.getMeans(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
@@ -1861,7 +1928,7 @@ public class InterfaceApp {
 		    		    		String[] tabKMoy = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 		    		    		String[] tabClass = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
 		    		    		String[] tabMode = calc.getModes(dfp.getNbDataColumns());//new double[fp.getNbOfColumns()-1];
-		    		    		
+
 		    		    		if(title.equals("Statistical Calculs")) {
 		    		    			//TODO A_CHANGER
 		    		                //corp.createTab(document, dfp.getNbDataColumns(), tabMean, tabMediane, tabSD, tabMin, tabMax, tabVar, tabKMoy, tabClass, tabMode);
@@ -1871,12 +1938,12 @@ public class InterfaceApp {
 		    		                 document.add(corp.paraResume);
 		    		                 document.add(corp.paraResume1);
 		    		                 document.add(corp.paraResume2);
-		    		                 
+
 		    		                 document.add(corp.paraResume4);
 		    		                 //for(int i=0;i<dfp.getNbObjectFound();i++){
 		    		                  document.add(corp.paraResume5);
 		    		                 //}
-		    		                 
+
 		    		                 document.add(corp.paraResume7);
 		    		                 document.add(corp.table);
 		    		                } catch (DocumentException ex) {
@@ -1893,12 +1960,12 @@ public class InterfaceApp {
 		    		                 document.add(corp.paraResume);
 		    		                 document.add(corp.paraResume1);
 		    		                 document.add(corp.paraResume2);
-		    		                 
+
 		    		                 document.add(corp.paraResume4);
 		    		                 //for(int i=0;i<dfp.getNbObjectFound();i++){
 		    		                  document.add(corp.paraResume5);
 		    		                 //}
-		    		                 
+
 		    		                 document.add(corp.paraResume7);
 		    		                document.add(corp.tablecorel);
 		    		                } catch (DocumentException ex) {
@@ -1914,12 +1981,12 @@ public class InterfaceApp {
 		    		                 document.add(corp.paraResume);
 		    		                 document.add(corp.paraResume1);
 		    		                 document.add(corp.paraResume2);
-		    		                 
+
 		    		                 document.add(corp.paraResume4);
 		    		                 //for(int i=0;i<dfp.getNbObjectFound();i++){
 		    		                  document.add(corp.paraResume5);
 		    		                 //}
-		    		                 
+
 		    		                 document.add(corp.paraResume8);
 		    		                 document.add(corp.table);
 		    		                } catch (DocumentException ex) {
@@ -1935,12 +2002,12 @@ public class InterfaceApp {
 		       		                 document.add(corp.paraResume);
 		       		                 document.add(corp.paraResume1);
 		       		                 document.add(corp.paraResume2);
-		       		                 
+
 		       		                 document.add(corp.paraResume4);
 		       		                 //for(int i=0;i<dfp.getNbObjectFound();i++){
 		       		                  document.add(corp.paraResume5);
 		       		                 //}
-		       		                 
+
 		       		                 document.add(corp.paraResume9);
 		       		                 document.add(corp.table);
 		       		                } catch (DocumentException ex) {
@@ -1960,12 +2027,12 @@ public class InterfaceApp {
     	      			lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeWarning.png"));
 						lblInfo.setText("Error : No data found ! you must import a data file first !");
     	      		}
-    	      		
+
             	}
             });
             btnNewButton_3.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconePdf.png"));
             btnNewButton_3.setToolTipText("Export to PDF");
-            
+
             Button btnAbout = new Button(composite_3, SWT.FLAT);
             btnAbout.addSelectionListener(new SelectionAdapter() {
             	@Override
@@ -1977,8 +2044,8 @@ public class InterfaceApp {
             btnAbout.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
             btnAbout.setToolTipText("About");
             new Label(composite_3, SWT.NONE);
-            
-                                    
+
+
             Label label_1 = new Label(composite_3, SWT.SEPARATOR);
             GridData gd_label_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
             gd_label_1.heightHint = 18;
@@ -1986,20 +2053,20 @@ public class InterfaceApp {
             label_1.setText("...");
             new Label(composite_3, SWT.NONE);
             viewForm.setLayoutData(BorderLayout.CENTER);
-            
+
             viewForm.setContent(tabFolder);
-            
+
             tbtmResults.add(new TabItem(tabFolder, SWT.NONE));
             tbtmResults.get(0).setText("Home");
             tbtmResults.get(0).setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeHome.png"));
             scrolledComposite.add(new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL));
-            
+
             //
             tableRes.add(new Table(scrolledComposite.get(0), SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI));
-           
 
-                       
-            
+
+
+
             Button btnNewView = new Button(composite_3, SWT.FLAT | SWT.CENTER);
             btnNewView.addSelectionListener(new SelectionAdapter() {
             	@Override
@@ -2011,23 +2078,23 @@ public class InterfaceApp {
             			tbtmResults.get(j).setText("View |"+j);
             		else
             			tbtmResults.get(j).setText("View");
-            		
+
             		scrolledComposite.add(new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL));
             		tableRes.add(new Table(scrolledComposite.get(j), SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI));
             		tbtmResults.get(j).setControl(scrolledComposite.get(j));
-            		
-            		
+
+
             	}
             });
             btnNewView.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/btn_plus.png"));
             btnNewView.setToolTipText("Add new tab");
-            
+
             Button btnDelView = new Button(composite_3, SWT.FLAT);
             btnDelView.addSelectionListener(new SelectionAdapter() {
             	@Override
             	public void widgetSelected(SelectionEvent e) {
             		//suppression de la vue active
-            		
+
             		int activeItem = getActiveTabItem(tabFolder);
             		if(tabFolder.getItemCount() > 1) {
             			scrolledComposite.get(activeItem).dispose();
@@ -2035,7 +2102,7 @@ public class InterfaceApp {
                 		scrolledComposite.remove(activeItem);
                 		tbtmResults.remove(activeItem);
                 		tableRes.remove(activeItem);
-                		
+
                 		for(int i = activeItem; i < tabFolder.getItemCount(); i++) {
                 			StringTokenizer st = new StringTokenizer(tbtmResults.get(i).getText(),"|");
                 			if(i>0)
@@ -2047,21 +2114,21 @@ public class InterfaceApp {
             			lblInfo.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/IconeAbout.png"));
     	      			lblInfo.setText("Cannot delete principal tab, close window if you want to quit the application");
             		}
-            			
-            		
+
+
             	}
             });
             GridData gd_btnDelView = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
             gd_btnDelView.heightHint = 29;
-            
+
             btnDelView.setLayoutData(gd_btnDelView);
             btnDelView.setImage(SWTResourceManager.getImage(InterfaceApp.class, "/resources/imgs/btn_delete.png"));
             btnDelView.setToolTipText("Delete current tab");
-      
-            if(home) {	            
-	            
+
+            if(home) {
+
             	StyledText  styledText = new StyledText(scrolledComposite.get(0), SWT.READ_ONLY);
-    		    
+
     		    styledText.setFont(SWTResourceManager.getFont("Times New Roman", 12, SWT.NORMAL));
                 styledText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 //                styledText.setSelectionForeground(SWTResourceManager.getColor(51, 153, 255));
@@ -2089,19 +2156,19 @@ public class InterfaceApp {
                 styledText.setMarginColor(SWTResourceManager.getColor(SWT.COLOR_LIST_SELECTION));
                 styledText.setLeftMargin(5);
                 styledText.setDoubleClickEnabled(false);
-                styledText.setEditable(false);	            
+                styledText.setEditable(false);
 	            scrolledComposite.get(0).setExpandVertical(true);
 	            scrolledComposite.get(0).setExpandHorizontal(true);
 	            tbtmResults.get(0).setControl(scrolledComposite.get(0));
-	            
+
 	            scrolledComposite.get(0).setContent(styledText);
 	            scrolledComposite.get(0).setMinSize(styledText.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-	            
+
 	            home = false;
-            }	            
-                    
+            }
+
 	        /**
-	         * 
+	         *
 	         */
 	        shell.open();
 	   	   	shell.layout();
@@ -2111,9 +2178,9 @@ public class InterfaceApp {
 	   	   		}
 	   	   	}
 	 }
-	 
+
 	 /**
-	  * 
+	  *
 	  * @param tabFolder
 	  * @return l'onglet active
 	  */
@@ -2126,4 +2193,3 @@ public class InterfaceApp {
 	    	return i;
 	    }
 }
-            
